@@ -1,0 +1,98 @@
+[
+  {
+    "model": "inventory.product",
+    "pk": 1,
+    "fields": {
+      "name": "Red T-shirt",
+      "slug": "red-tshirt",
+      "brand": 1,
+      "category": 1,
+      "description": "A comfortable and stylish red t-shirt for everyday wear.",
+      "price": 19.99,
+      "discount_price": null,
+      "available": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 2,
+    "fields": {
+      "name": "Blue Jeans",
+      "slug": "blue-jeans",
+      "brand": 2,
+      "category": 2,
+      "description": "A classic pair of blue jeans, perfect for any occasion.",
+      "price": 49.99,
+      "discount_price": 19.99,
+      "available": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 3,
+    "fields": {
+      "name": "Black Boots",
+      "slug": "black-boots",
+      "brand": 3,
+      "category": 3,
+      "description": "A sleek pair of black leather boots, great for any outfit.",
+      "price": 79.99,
+      "discount_price": null,
+      "available": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 4,
+    "fields": {
+      "name": "Yellow Raincoat",
+      "slug": "yellow-raincoat",
+      "brand": 4,
+      "category": 4,
+      "description": "Stay dry in style with this bright yellow raincoat.",
+      "price": 59.99,
+      "discount_price": 39.99,
+      "available": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 5,
+    "fields": {
+      "name": "Green Running Shoes",
+      "slug": "green-running-shoes",
+      "brand": 5,
+      "category": 5,
+      "description": "A comfortable pair of running shoes in a vibrant green color.",
+      "price": 59.99,
+      "discount_price": null,
+      "available": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 6,
+    "fields": {
+      "name": "Purple Dress",
+      "slug": "purple-dress",
+      "brand": 5,
+      "category": 6,
+      "description": "A beautiful purple dress, perfect for special occasions.",
+      "price": 99.99,
+      "discount_price": 39.99,
+      "available": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  }
+]

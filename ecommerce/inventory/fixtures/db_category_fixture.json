@@ -1,0 +1,99 @@
+[
+  {
+    "model": "inventory.category",
+    "pk": 1,
+    "fields": {
+      "name": "Electronics",
+      "slug": "electronics",
+      "parent": null,
+      "is_active": true,
+      "created_at": "2022-02-10T14:30:00Z",
+      "updated_at": "2022-02-10T14:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 2,
+    "fields": {
+      "name": "Mobiles",
+      "slug": "mobiles",
+      "parent": 1,
+      "is_active": true,
+      "created_at": "2022-02-11T10:15:00Z",
+      "updated_at": "2022-02-11T10:15:00Z"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 3,
+    "fields": {
+      "name": "Laptops",
+      "slug": "laptops",
+      "parent": 1,
+      "is_active": true,
+      "created_at": "2022-02-12T11:45:00Z",
+      "updated_at": "2022-02-12T11:45:00Z"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 4,
+    "fields": {
+      "name": "Clothing",
+      "slug": "clothing",
+      "parent": null,
+      "is_active": true,
+      "created_at": "2022-03-01T08:00:00Z",
+      "updated_at": "2022-03-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 5,
+    "fields": {
+      "name": "Men's Clothing",
+      "slug": "mens-clothing",
+      "parent": 4,
+      "is_active": true,
+      "created_at": "2022-03-02T14:30:00Z",
+      "updated_at": "2022-03-02T14:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 6,
+    "fields": {
+      "name": "Women's Clothing",
+      "slug": "womens-clothing",
+      "parent": 4,
+      "is_active": true,
+      "created_at": "2022-03-03T11:00:00Z",
+      "updated_at": "2022-03-03T11:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 7,
+    "fields": {
+      "name": "Books",
+      "slug": "books",
+      "parent": null,
+      "is_active": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 8,
+    "fields": {
+      "name": "Fiction",
+      "slug": "fiction",
+      "parent": 7,
+      "is_active": true,
+      "created_at": "2022-04-01T09:00:00Z",
+      "updated_at": "2022-04-01T09:00:00Z"
+    }
+  }
+
+]

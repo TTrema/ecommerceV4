@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+{% block content %}
+
+<!--Main layout-->
+<main class="mt-5 pt-4">
+    <div class="container mt-5">
+        <!--Grid row-->
+        <div class="row">
+            <!--Grid column-->
+            <div id="product-images" class="col-md-6 mb-4">
+                <div class="row">
+                  <div class="col-3">
+                    {% for item in products2 %}
+                    asdsad
+                    {% endfor %}
+
+                    {% if product.product_image.all|length > 1 %}
+                    {% for image in product.product_image.all %}
+                        <img class="img-fluid mx-auto d-block product-image" style="border: 1px solid #ccc; margin-bottom: 10px;" width="100%" alt="Responsive image" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"> </img>               
+                    {% endfor %}
+                    {% endif %}
+                  </div>
+                  <div class="col-9">
+                    {% for image in product.product_image.all %}
+                      {% if image.is_feature %} 
+                        <img id="main-image" class="img-fluid mx-auto d-block mb-3" style="width: 100%; max-width: 500px;" alt="Responsive image" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"></img>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              
+              
+
+
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-md-6 mb-4">
+                <h1>{{ product.name }}</h1>
+
+                <h5><a href="{{ brand.get_absolute_url }}" class="card-title mb-2 text-primary font-weight-normal text-decoration-none">Marca: {{ brand.title }}</a></h5>
+                <!--Content-->
+                <div class="p-4">
+                    <div class="mb-3">
+                        <a href="">
+                            <span class="badge bg-dark me-1">{{ product.get_category_display }}</span>
+                        </a>
+                        {% if product.discount_price %}
+                            <span class="badge bg-danger me-1">Sale</span>
+                        {% endif %} 
+                        </a>
+                    </div>
+
+                    <p class="lead">                       
+                        {% if product.discount_price %}
+                        <span class="me-1">
+                            <del>R$ {{ product.price }}</del>
+                        </span>
+                        <span>R$ {{ product.discount_price }}</span><span class="badge bg-danger ms-2"> - {{ product.offprice }}%</span>
+                        {% else %}
+                        <span>R$ {{ product.price }}</span>
+                        {% endif %}     
+                    </p>
+
+                    <strong><p style="font-size: 20px;">Descrição</p></strong>
+
+                    <p>{{ product.description }}</p>
+
+                    <a href="{{ product.get_add_to_cart_url }}" class="btn btn-primary ms-1">
+                        Adicionar ao Carrinho
+                        <i class="fas fa-shopping-cart ms-1"></i>
+                    </a>
+                    {% comment %} <a href="{{ product.get_remove_from_cart_url }}" class="btn btn-danger ms-1">
+                        Remove from cart
+                    </a> {% endcomment %}
+
+                </div>
+                <!--Content-->
+            </div>
+            <!--Grid column-->
+        </div>
+        <!--Grid row-->
+
+        <hr />
+
+        <!--Grid row-->
+        <div class="row d-flex justify-content-center">
+            <!--Grid column-->
+            <div class="col-md-6 text-center">
+                <h5 class="my-4 h4">quem viu este produto viu também</h5>
+            </div>
+            <!--Grid column-->
+        </div>
+        <!--Grid row-->
+
+<!-- Products -->
+<section>
+    <div class="">
+      <div class="row">
+        {% for item in product2 %}
+  
+        <div class="col-lg-3 col-md-4 mb-4">
+            <div class="card">
+                <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                    data-mdb-ripple-color="light">
+                    {% for image in item.product_image.all %}
+                    {% if image.is_feature %}
+                    <img src="{{ image.image.url }}" class="product-img" style="height: 100%; width: 100%; object-fit: contain;" />
+                    <a href="{{ item.get_absolute_url }}">
+                    {% endif %}
+                    {% endfor %}
+  
+                    <div class="mask">
+                        <div class="d-flex justify-content-start align-items-end h-100">
+                            <h5><span class="badge bg-{{ item.get_label_display }} ms-2">NEW</span></h5>
+                        </div>
+                    </div>
+                    <div class="hover-overlay">
+                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                  <a href="{{ item.get_absolute_url }}" class="text-reset highlight-link">
+                    <h5 class="card-title mb-2">{{ item.name }}</h5>
+                  </a>
+                  
+                    <a href="" class="text-reset ">
+                        <p>{{ item.get_category_display }}</p>
+                    </a>
+                    <h6 class="mb-3 price">
+                        {% if item.discount_price %}
+                        <small><del class="product__Del-sc-vep9u6-14 eKIfys">R$ {{ item.price }}</del></small>
+                        <b><div class="product__Price-sc-vep9u6-8 fKxMzl">R$ {{ item.discount_price }}</div></b>
+                        <span class="badge bg-danger"> {{ item.offprice }}% de desconto</span>               
+                        {% else %}
+                        R$ {{ item.price }}   
+                       {% comment %} <div class="product__Installment-sc-vep9u6-10 elOrdS">1x de R$ 63,42 sem juros no cartão </div> {% endcomment %}
+                        {% endif %}
+                    </h6>
+                </div>
+            </div>
+        </div>
+        
+        {% endfor %}
+</main>
+<!--Main layout-->
+
+<script>
+    const images = document.querySelectorAll('.product-image');
+    const mainImage = document.querySelector('#main-image');
+    
+    images.forEach(image => {
+        image.addEventListener('mouseover', () => {
+            const src = image.getAttribute('src');
+            
+            mainImage.setAttribute('src', src);
+        });
+    });
+</script>
+
+
+</body>
+</html>
+
+{% endblock content %}
+

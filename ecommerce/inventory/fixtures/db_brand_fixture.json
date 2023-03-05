@@ -1,0 +1,52 @@
+[
+  {
+     "model":"inventory.brand",
+     "pk":1,
+     "fields":{
+        "title":"Nike",
+        "slug":"nike",
+        "created_at": "2022-04-01T09:00:00Z",
+        "updated_at": "2022-04-01T09:00:00Z"
+     }
+  },
+  {
+     "model":"inventory.brand",
+     "pk":2,
+     "fields":{
+        "title":"Adidas",
+        "slug":"adidas",
+        "created_at": "2022-04-01T09:00:00Z",
+        "updated_at": "2022-04-01T09:00:00Z"
+     }
+  },
+  {
+     "model":"inventory.brand",
+     "pk":3,
+     "fields":{
+        "title":"Puma",
+        "slug":"puma",
+        "created_at": "2022-04-01T09:00:00Z",
+        "updated_at": "2022-04-01T09:00:00Z"
+     }
+  },
+  {
+     "model":"inventory.brand",
+     "pk":4,
+     "fields":{
+        "title":"Reebok",
+        "slug":"reebok",
+        "created_at": "2022-04-01T09:00:00Z",
+        "updated_at": "2022-04-01T09:00:00Z"
+     }
+  },
+  {
+     "model":"inventory.brand",
+     "pk":5,
+     "fields":{
+        "title":"Under Armour",
+        "slug":"under-armour",
+        "created_at": "2022-04-01T09:00:00Z",
+        "updated_at": "2022-04-01T09:00:00Z"
+     }
+  }
+]
