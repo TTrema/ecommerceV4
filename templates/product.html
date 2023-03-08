@@ -19,14 +19,14 @@
 
                     {% if product.product_image.all|length > 1 %}
                     {% for image in product.product_image.all %}
-                        <img class="img-fluid mx-auto d-block product-image" style="border: 1px solid #ccc; margin-bottom: 10px;" width="100%" alt="Responsive image" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"> </img>               
+                        <img class="img-fluid mx-auto d-block product-image" style="border: 1px solid #ccc; margin-bottom: 10px;" width="40%" alt="Responsive image" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"> </img>               
                     {% endfor %}
                     {% endif %}
                   </div>
                   <div class="col-9">
                     {% for image in product.product_image.all %}
                       {% if image.is_feature %} 
-                        <img id="main-image" class="img-fluid mx-auto d-block mb-3" style="width: 100%; max-width: 500px;" alt="Responsive image" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"></img>
+                        <img id="main-image" class="img-fluid mx-auto d-block mb-3" style="width: 100%; max-width: 300px;" alt="Responsive image" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"></img>
                       {% endif %}
                     {% endfor %}
                   </div>
@@ -109,15 +109,13 @@
                     data-mdb-ripple-color="light">
                     {% for image in item.product_image.all %}
                     {% if image.is_feature %}
-                    <img src="{{ image.image.url }}" class="product-img" style="height: 100%; width: 100%; object-fit: contain;" />
+                    <img src="{{ image.image.url }}" class="product-img" style="height: 300px; width: 100%; object-fit: contain;" />
                     <a href="{{ item.get_absolute_url }}">
                     {% endif %}
                     {% endfor %}
   
                     <div class="mask">
-                        <div class="d-flex justify-content-start align-items-end h-100">
-                            <h5><span class="badge bg-{{ item.get_label_display }} ms-2">NEW</span></h5>
-                        </div>
+     
                     </div>
                     <div class="hover-overlay">
                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
@@ -125,7 +123,8 @@
                 </div>
                 <div class="card-body">
                   <a href="{{ item.get_absolute_url }}" class="text-reset highlight-link">
-                    <h5 class="card-title mb-2">{{ item.name }}</h5>
+                    <h5 class="card-title mb-2">{{ item.name|truncatechars:42 }}
+                    </h5>
                   </a>
                   
                     <a href="" class="text-reset ">
@@ -138,7 +137,6 @@
                         <span class="badge bg-danger"> {{ item.offprice }}% de desconto</span>               
                         {% else %}
                         R$ {{ item.price }}   
-                       {% comment %} <div class="product__Installment-sc-vep9u6-10 elOrdS">1x de R$ 63,42 sem juros no cartão </div> {% endcomment %}
                         {% endif %}
                     </h6>
                 </div>

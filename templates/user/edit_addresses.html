@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1>{% if form.instance.pk %}Modifique{% else %}Adicione{% endif %} o seu Endereço</h1>
+      <form method="POST" action="" class="my-4">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="{{ form.full_name.id_for_label }}">Nome</label>
+          {{ form.full_name }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.zip_code.id_for_label }}">CEP (Digite apenas os números)</label>
+          {{ form.zip_code }}
+          {% if form.zip_code.errors %}
+            {% for error in form.zip_code.errors %}
+              <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>        
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="{{ form.city.id_for_label }}">Cidade</label>
+            {{ form.city }}
+          </div>
+          <div class="form-group col-md-6">
+            <label for="{{ form.state.id_for_label }}">Estado</label>
+            {{ form.state }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="{{ form.bairro.id_for_label }}">Bairro</label>
+          {{ form.bairro }}
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="{{ form.street.id_for_label }}">Rua</label>
+            {{ form.street }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.number.id_for_label }}">Número</label>
+            {{ form.number }}
+            {% if form.number.errors %}
+              {% for error in form.number.errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="{{ form.complemento.id_for_label }}">Complemento</label>
+          {{ form.complemento }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.phone.id_for_label }}">Telefone (Digite apenas os números com o DDD)</label>
+          {{ form.phone }}
+          {% if form.phone.errors %}
+            {% for error in form.phone.errors %}
+              <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.referencia.id_for_label }}">Referencia</label>
+          {{ form.referencia }}
+        </div>
+        <div class="form-check">
+          {{ form.default }}
+          <label for="{{ form.default.id_for_label }}" class="form-check-label">Principal</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#id_zip_code").on("input", function() {
+        var cep = $(this).val().replace(/\D/g, '');
+
+        if (cep) {
+          var url = "https://viacep.com.br/ws/" + cep + "/json/";
+
+          $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+              $("#id_street").val(data.logradouro);
+              $("#id_city").val(data.localidade);
+              $("#id_state").val(data.uf);
+              $("#id_bairro").val(data.bairro);
+            },
+            error: function(error) {
+              console.log(error);
+            }
+          });
+        }
+      });
+    });
+  </script>
+{% endblock %}

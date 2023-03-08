@@ -35,23 +35,19 @@
                   data-mdb-ripple-color="light">
                   {% for image in item.product_image.all %}
                   {% if image.is_feature %}
-                  <img src="{{ image.image.url }}" class="product-img" style="height: 100%; width: 100%; object-fit: contain;" />
+                  <img src="{{ image.image.url }}" class="product-img" style="height: 250px; width: 100%; object-fit: contain;" />
                   <a href="{{ item.get_absolute_url }}">
                   {% endif %}
                   {% endfor %}
 
-                  <div class="mask">
-                      <div class="d-flex justify-content-start align-items-end h-100">
-                          <h5><span class="badge bg-{{ item.get_label_display }} ms-2">NEW</span></h5>
-                      </div>
-                  </div>
                   <div class="hover-overlay">
                       <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                   </div>
               </div>
               <div class="card-body">
                   <a href="{{ item.get_absolute_url }}" class="text-reset">
-                      <h5 class="card-title mb-2">{{ item.name }}</h5>
+                      <h5 class="card-title mb-2">{{ item.name|truncatechars:42 }}
+                      </h5>
                   </a>
                   <a href="" class="text-reset ">
                       <p>{{ item.get_category_display }}</p>

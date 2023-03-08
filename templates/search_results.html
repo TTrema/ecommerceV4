@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Navbar -->
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B">
+
+  </nav>
+  <!-- Navbar -->
+
+ <!--Main layout-->
+<main>
+<div class="container">
+
+  <div class="container" style="max-width: 1000px">
+    <div class="col-12">
+      <h1 class="h2">{{ category.name|title }}</h1>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+      <div>Resultado da pesquisa para {{ request.GET.q}}</div>
+    </div>
+    <hr />
+  </div>  
+  
+<!-- Products -->
+  <section>
+  <div class="text-center">
+    <div class="row">
+      
+      {% for item in products %}
+
+      <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+              <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                  data-mdb-ripple-color="light">
+                  {% for image in item.product_image.all %}
+                  {% if image.is_feature %}
+                  <img src="{{ image.image.url }}" class="product-img" style="height: 250px; width: 100%; object-fit: contain;" />
+                  <a href="{{ item.get_absolute_url }}">
+                  {% endif %}
+                  {% endfor %}
+
+   
+                  <div class="hover-overlay">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                  </div>
+              </div>
+              <div class="card-body">
+                  <a href="{{ item.get_absolute_url }}" class="text-reset">
+                      <h5 class="card-title mb-2">{{ item.name|truncatechars:42 }}
+                      </h5>
+                  </a>
+                  <a href="" class="text-reset ">
+                      <p>{{ item.get_category_display }}</p>
+                  </a>
+                  <h6 class="mb-3 price">
+                      {% if item.discount_price %}
+                      <small><del class="product__Del-sc-vep9u6-14 eKIfys">R$ {{ item.price }}</del></small>
+                      <b><div class="product__Price-sc-vep9u6-8 fKxMzl">R$ {{ item.discount_price }}</div></b>
+                      <span class="badge bg-danger"> {{ item.offprice }}% de desconto</span>               
+                      {% else %}
+                      R$ {{ item.price }}   
+                     {% comment %} <div class="product__Installment-sc-vep9u6-10 elOrdS">1x de R$ 63,42 sem juros no cartão </div> {% endcomment %}
+                      {% endif %}
+                  </h6>
+              </div>
+          </div>
+      </div>
+      
+      {% endfor %}
+
+      
+  
+<!-- Pagination -->
+      {% if is_paginated %}
+  <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+  <ul class="pagination">
+         {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+    <li class="page-item active"><a class="page-link" href="{{ page_obj.number }}">{{ page_obj.number }}</a></li>
+    {% comment %} <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">4</a></li>
+    <li class="page-item"><a class="page-link" href="#">5</a></li> {% endcomment %}
+    {% if page_obj.has_next %}
+    <li class="page-item">
+       <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>  
+{% endif %}
+<!-- Pagination -->  
+</div>
+</main>
+ <!--Main layout-->
+
+
+
+</body>
+</html>
+
+{% endblock content %}

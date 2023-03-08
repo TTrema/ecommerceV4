@@ -1,0 +1,104 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block title %}Basket Summary{%endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="col-12 mt-4">
+    <h1 class="h2">Endereço de entrega</h1>
+  </div>
+  <div class="col-12">
+    <p>Por favor selecione seu endereço para a entrega</p>
+  </div>
+  <hr />
+</div>
+<div class="container">
+  <a role="button" href="{% url 'core:add_address' %}" class="btn btn-primary btn-sm fw-bold w-1" type="button">Adicionar novo endereço</a>
+  <div class="row g-3">
+    {% if addresses|length == 0 %}
+    <div class="col-12">Não tem endereços para a entrega, <a href="{% url 'core:add_address' %}">Adicionar endereço</a></div>
+    {% else %}
+    <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
+      {% include "user/order_snippet.html" %}   
+
+<a role="button" href="{% comment %}
+  {% url 'checkout:payment_selection' %}
+{% endcomment %}" class="btn btn-success fw-bold w-100" type="button">Continuar a Compra</a>
+</div>
+
+
+
+    <div class="col-md-7 col-lg-8">
+      {% for address in addresses %}
+      {% if not address.default %}
+        <h1 class="h5 pt-4">Outros Endereços</h1>
+      {% endif %}
+      
+      <div class="card mb-3 border-1 rounded-0 product-item me-md-4" data-index="{{option.id}}">
+        <div class="row g-0">
+          <div class="col">
+            <div class="card pb-3 rounded-0">
+              <div class="card-header bg-white small text-muted">
+                <p class="card-text m-0 {% if address.default %}text-danger{% endif %}">
+                {% if address.default %}
+                <h3>Endereço de entrega:</h3>
+                {% endif %}
+                &nbsp;
+              </div>
+              <div class="card-body small pb-1">
+                <p class="card-text m-0 fw-bold">{{address.full_name}}</p>
+                <p class="card-text m-0">{{address.street}} n°{{address.number}}</p>
+                <p class="card-text m-0">{{address.bairro}}</p>
+                <p class="card-text m-0">{{address.city}}</p>
+                <p class="card-text m-0">{{address.zip_code}}</p>
+                <div class="pt-5">
+                  <a href="{% url 'core:edit_address' address.id %}" class="text-decoration-none">Edit</a>
+                  {% if not address.default %}
+                  | <a href="{% url 'core:set_default' address.id %}" class="text-decoration-none">Select</a>
+                  {% endif %}
+                  
+                </div>
+              </div>
+            </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+var hideable_shipping_form = $('.hideable_shipping_form');
+var hideable_billing_form = $('.hideable_billing_form');
+
+var use_default_shipping = document.querySelector("input[name=use_default_shipping]");
+var use_default_billing = document.querySelector("input[name=use_default_billing]");
+
+use_default_shipping.addEventListener('change', function() {
+  if (this.checked) {
+    hideable_shipping_form.hide();
+  } else {
+    hideable_shipping_form.show();
+  }
+})
+
+use_default_billing.addEventListener('change', function() {
+  if (this.checked) {
+    hideable_billing_form.hide();
+  } else {
+    hideable_billing_form.show();
+  }
+})
+
+</script>
+{% endblock extra_scripts %}

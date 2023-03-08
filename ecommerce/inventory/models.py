@@ -54,6 +54,16 @@ class Product(models.Model):
 
     def offprice(self):
         return str(int((1 - self.discount_price / self.price) * 100))
+    
+    def get_add_to_cart_url(self):
+        return reverse("core:add-to-cart", kwargs={
+            'slug': self.slug
+        })
+
+    def get_remove_from_cart_url(self):
+        return reverse("core:remove-from-cart", kwargs={
+            'slug': self.slug
+        })
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_image')
@@ -67,17 +77,6 @@ class ProductImage(models.Model):
         verbose_name_plural = "Product Images"
 
 
-# class Customer(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     phone = models.CharField(max_length=20, blank=True)
-#     address_line_1 = models.CharField(max_length=255)
-#     address_line_2 = models.CharField(max_length=255, blank=True)
-#     city = models.CharField(max_length=50)
-#     state = models.CharField(max_length=50)
-#     postal_code = models.CharField(max_length=20)
-
-#     def __str__(self):
-#         return self.user.username
 
 # class Order(models.Model):
 #     STATUS_CHOICES = (
@@ -99,18 +98,6 @@ class ProductImage(models.Model):
 #     def __str__(self):
 #         return str(self.id)
 
-# class OrderItem(models.Model):
-#     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     quantity = models.IntegerField(default=1)
-#     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-# class Coupon(models.Model):
-#     code = models.CharField(max_length=30, unique=True)
-#     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-#     is_active = models.BooleanField(default=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
 
 # class Wishlist(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -1,0 +1,31 @@
+[
+    {
+      "model": "core.address",
+      "pk": 1,
+      "fields": {
+        "user": 2,
+        "street": "Rua A, 123",
+        "zip_code": "12345-678",
+        "city": "São Paulo",
+        "state": "SP",
+        "country": "Brasil",
+        "created_at": "2023-03-05T22:17:43.350Z",
+        "updated_at": "2023-03-05T22:17:43.350Z"
+      }
+    },
+    {
+      "model": "core.address",
+      "pk": 2,
+      "fields": {
+        "user": 2,
+        "street": "Rua B, 456",
+        "zip_code": "98765-432",
+        "city": "Rio de Janeiro",
+        "state": "RJ",
+        "country": "Brasil",
+        "created_at": "2023-03-05T22:17:43.350Z",
+        "updated_at": "2023-03-05T22:17:43.350Z"
+      }
+    }
+  ]
+  

@@ -1,7 +1,8 @@
 
+{% load cart_template_tags %}
 
 <!-- Navbar -->
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
     <!-- Container wrapper -->
     <div class="container">
         <!-- Toggle button -->
@@ -105,11 +106,24 @@
                       </li>
                       
 
-                      <li class="nav-item">
-                        <a class="nav-link disabled"
-                          >Disabled</a
-                        >
-                      </li>
+                      <nav class="">
+                        <div class="container-fluid">
+                          <form class="d-flex input-group w-auto" action="/pesquisa">
+                            <input
+                              id="searchproducts"
+                              name="q"
+                            
+                              class="form-control rounded"
+                              placeholder="Search"
+                              aria-label="Search"
+                              aria-describedby="search-addon"
+                            />
+                            <button class="input-group-text border-0" id="searchb">
+                              <i class="fas fa-search" type="submit"></i>
+                            </button>
+                          </form>
+                        </div>
+                      </nav>
                     </ul>
                     <!-- Left links -->
                   </div>
@@ -117,22 +131,7 @@
                 </div>
                 <!-- Container wrapper -->
               </nav>
-                <nav class="navbar navbar-light bg-light">
-                  <div class="container-fluid">
-                    <form class="d-flex input-group w-auto">
-                      <input
-                        type="search"
-                        class="form-control rounded"
-                        placeholder="Search"
-                        aria-label="Search"
-                        aria-describedby="search-addon"
-                      />
-                      <span class="input-group-text border-0" id="search-addon">
-                        <i class="fas fa-search"></i>
-                      </span>
-                    </form>
-                  </div>
-                </nav>
+
             </ul>
             
             <!-- Left links -->
@@ -143,51 +142,33 @@
         {% if request.user.is_authenticated %}
         <div class="d-flex align-items-center">
             <!-- Icon -->
-            <a class="nav-link me-4" href="{% comment %}
-              {% url "basket:basket_summary" %}
-            {% endcomment %}">
+            <a class="nav-link me-4" href="{% url 'core:order-summary' %}">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="badge rounded-pill badge-notification bg-danger">{{ total_qty }}</span>
+                <span class="badge rounded-pill badge-notification bg-danger">{{ request.user|cart_item_count }}</span>
             </a>
                   <!-- Icon dropdown -->
-        <a
-          class="nav-link dropdown-toggle"
-          href="#"
-          id="navbarDropdown"
-          role="button"
-          data-mdb-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="fas fa-user"></i>
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="#">Action</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another action</a>
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="{% comment %}
-              {% url "account:logout" %}
-            {% endcomment %}">Logout</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
+
+    <div class="dropdown show">
+      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       Minha Conta
+      </a>
+    
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="{% url 'core:addresses' %}">Endereços</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <li><hr class="dropdown-divider" /></li>
+        <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+      </div>
+    </div>
     {% else %}
   
-      <a class="nav-link waves-effect me-4" href="{% comment %}
-        {% url "account:login" %}
-      {% endcomment %}">
-        <span class="clearfix d-none d-sm-inline-block"> Login </span>
-      </a>
-      <a class="nav-link waves-effect" href="{% comment %}
-        {% url 'account_signup' %}
-      {% endcomment %}">
-        <span class="clearfix d-none d-sm-inline-block"> Signup </span>
-      </a>
+    <a class="nav-link waves-effect me-4" href="{% url 'account_login' %}">
+      <span class="clearfix d-none d-sm-inline-block"> Login </span>
+    </a>
+    <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
+      <span class="clearfix d-none d-sm-inline-block"> Signup </span>
+    </a>
+
 
     {% endif %}
         </div>
@@ -195,3 +176,11 @@
     </div>
     <!-- Container wrapper -->
 </nav>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+      $("#searchproducts").autocomplete({
+          source: "{% url 'core:product_search' %}"
+      });
+  });
+</script>
