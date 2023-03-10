@@ -20,3 +20,11 @@ Feito até agora:
 
 
 - Sistema de busca de produtos com completamento automático 
+
+
+- Sistema de pagamento com Stripe e Paypal
+
+
+- Sistema para pedido de reembolso
+
+

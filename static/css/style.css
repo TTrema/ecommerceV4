@@ -2,3 +2,17 @@
   width: 400px;
   font-size: 18px;
 }
+
+#my-custom-class {
+  width: 10%; /* ou qualquer outra largura desejada */
+  max-width: 10px; /* ou qualquer outra largura máxima desejada */
+  margin: 0 auto; /* centralizar a lista horizontalmente */
+}
+
+.form-control.mb-4 {
+  margin-bottom: 5rem;
+}
+
+#form-control.mb-4 {
+  margin-bottom: 5rem;
+}

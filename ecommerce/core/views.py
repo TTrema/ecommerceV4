@@ -1,27 +1,86 @@
+import decimal
+import json
+import random
+import string
 import xml.etree.ElementTree as ET
-from django.http import JsonResponse
-from django.views.decorators.http import require_GET
 
 import requests
+import stripe
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.views.generic import DetailView, ListView, View
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
 
-from ecommerce.core.forms import CouponForm, UserAddressForm
-from ecommerce.core.models import Address, Coupon, Order, OrderItem
+from ecommerce.core.forms import CouponForm, PaymentForm, RefundForm, UserAddressForm, UserEditForm
+from ecommerce.core.models import Address, Coupon, Order, OrderItem, Payment, Refund, UserProfile
 from ecommerce.inventory.models import Brand, Category, Product
+
+stripe.api_key = settings.STRIPESK
+
+
+def create_ref_code():
+    code = "".join(random.choices(string.ascii_lowercase + string.digits, k=20))
+    while Order.objects.filter(ref_code=code).exists():
+        code = "".join(random.choices(string.ascii_lowercase + string.digits, k=20))
+    return code
 
 
 def homepage(request):
     products = Product.objects.prefetch_related("product_image").filter(available=True)
     return render(request, "home.html", {"products": products})
+
+
+def payment_success(request):
+    return render(request, "user/payment_successful.html")
+
+
+def paypal(request):
+    paypalid = settings.PAYPAL_ID
+    print(id)
+    order = Order.objects.get(user=request.user, ordered=False)
+    if order.billing_address:
+
+        session = request.session
+        addresses = Address.objects.filter(user=request.user).order_by("-default")
+        paypaltotal = str(order.get_total_frete()).replace(",", ".")
+
+        if "address" not in request.session:
+            session["address"] = {"address_id": str(addresses[0].id)}
+        else:
+            session["address"]["address_id"] = str(addresses[0].id)
+            session.modified = True
+
+        context = {
+            "paypalid": paypalid,
+            "addresses": addresses,
+            "order": order,
+            "paypaltotal": paypaltotal,
+        }
+        return render(request, "user/paypalpay.html", context)
+    else:
+        messages.warning(request, "Você ainda não adicionou nenhum endereço para a compra")
+        return redirect("core:delivery_address")
+
+
+@login_required
+def edit_details(request):
+    if request.method == "POST":
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+
+    return render(request, "user/edit_details.html", {"user_form": user_form})
 
 
 def product_detail(request, slug):
@@ -163,7 +222,7 @@ def remove_single_item_from_cart(request, slug):
 
 @login_required
 def view_address(request):
-    addresses = Address.objects.filter(user=request.user)
+    addresses = Address.objects.filter(user=request.user).order_by("-default")
     return render(request, "user/addresses.html", {"addresses": addresses})
 
 
@@ -175,9 +234,13 @@ def add_address(request):
             address_form = address_form.save(commit=False)
             address_form.user = request.user
             address_form.save()
-            return HttpResponseRedirect(reverse("core:addresses"))
-        else:
-            return HttpResponse("Error handler content", status=400)
+            if Address.objects.filter(user=request.user, default=True).exists():
+                return HttpResponseRedirect(reverse("core:addresses"))
+
+            else:
+                Address.objects.filter(user=request.user).update(default=True)
+                return HttpResponseRedirect(reverse("core:addresses"))
+
     else:
         address_form = UserAddressForm()
     return render(request, "user/edit_addresses.html", {"form": address_form})
@@ -216,8 +279,13 @@ def set_default(request, id):
     return redirect("core:addresses")
 
 
-def calculate_shipping(zip_code):
+def calculate_shipping(zip_code, shipping_method):
     # Define os parâmetros da requisição para o web service dos Correios
+    if shipping_method == "S":
+        shipping_method = "40010"
+    else:
+        shipping_method = "41106"
+
     url = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx"
     params = {
         "nCdEmpresa": "",
@@ -233,7 +301,7 @@ def calculate_shipping(zip_code):
         "sCdMaoPropria": "N",  # Indica se a encomenda será entregue com o serviço "Mão própria"
         "nVlValorDeclarado": 50,  # Valor declarado da encomenda (em reais)
         "sCdAvisoRecebimento": "N",  # Indica se a encomenda será entregue com o serviço "Aviso de recebimento"
-        "nCdServico": "41106",  # Código do serviço de entrega dos Correios (SEDEX)
+        "nCdServico": shipping_method,  # Código do serviço de entrega dos Correios (SEDEX)
         "nVlDiametro": 20,  # Diâmetro da encomenda (em centímetros)
         "StrRetorno": "xml",  # Tipo de retorno da requisição
     }
@@ -243,39 +311,77 @@ def calculate_shipping(zip_code):
     root = ET.fromstring(response.content)
 
     # Extrai o valor do frete e o prazo de entrega da resposta em XML
-    price = float(root.find(".//Valor").text.replace(",", "."))
+    price = root.find(".//Valor").text.replace(",", ".")
+    price_decimal = decimal.Decimal(price).quantize(decimal.Decimal("0.01"))
     delivery_time = root.find(".//PrazoEntrega").text
-    return (price, delivery_time)
+
+    return (price_decimal, delivery_time)
 
 
 @login_required
 def delivery_address(request):
+
+    if request.method == "POST":
+        shipping_method = request.POST.get("shipping_method")
+        shipping_type = get_object_or_404(Order, user=request.user, ordered=False)
+        shipping_type.delivery_type = shipping_method
+        shipping_type.save()
 
     session = request.session
     # if "purchase" not in request.session:
     #     messages.success(request, "Please select delivery option")
     #     return HttpResponseRedirect(request.META["HTTP_REFERER"])
     order = Order.objects.get(user=request.user, ordered=False)
+    print(order.ordered)
     addresses = Address.objects.filter(user=request.user).order_by("-default")
-    frete = get_object_or_404(Address, default=True)
-    shipping_cost = calculate_shipping(frete.zip_code)  # Exemplo de cálculo de frete
+    shipping_type = get_object_or_404(Order, user=request.user, ordered=False)
+    default_address = Address.objects.get(user=request.user, default=True)
+    shipping_cost = calculate_shipping(default_address.zip_code, shipping_type.delivery_type)
+    print(order.get_total_frete())
 
-    if "address" not in request.session:
-        session["address"] = {"address_id": str(addresses[0].id)}
-    else:
-        session["address"]["address_id"] = str(addresses[0].id)
-        session.modified = True
+    order.delivery_price = shipping_cost[0]
+    order.shipping_address = default_address
+    order.save()
 
-    context = {"addresses": addresses, "couponform": CouponForm(), "order": order, "shipping_cost": shipping_cost, "DISPLAY_COUPON_FORM": True}
+    # if "address" not in request.session:
+    #     session["address"] = {"address_id": str(addresses[0].id)}
+    # else:
+    #     session["address"]["address_id"] = str(addresses[0].id)
+    #     session.modified = True
+
+    context = {
+        "addresses": addresses,
+        "couponform": CouponForm(),
+        "order": order,
+        "shipping_cost": shipping_cost,
+        "shipping_type": shipping_type.delivery_type,
+        "DISPLAY_COUPON_FORM": True,
+    }
     return render(request, "user/delivery_address.html", context)
 
 
+@login_required
 def get_coupon(request, code):
     try:
         coupon = Coupon.objects.get(code=code)
         return coupon
     except ObjectDoesNotExist:
         return None
+
+
+@login_required
+def delete_coupon(request):
+    order = Order.objects.get(user=request.user)
+    order.coupon = None
+    order.save()
+
+    return redirect("core:delivery_address")
+
+
+@login_required
+def delete_address(request, id):
+    address = Address.objects.filter(pk=id, user=request.user).delete()
+    return redirect("core:addresses")
 
 
 class AddCouponView(View):
@@ -297,21 +403,241 @@ class AddCouponView(View):
             return redirect("core:delivery_address")
 
 
-from django.db.models import Q
-from django.views.generic import ListView
+class RequestRefundView(View):
+    def get(self, *args, **kwargs):
+        form = RefundForm()
+        context = {"form": form}
+        return render(self.request, "user/request_refund.html", context)
+
+    def post(self, *args, **kwargs):
+        form = RefundForm(self.request.POST)
+        if form.is_valid():
+            ref_code = form.cleaned_data.get("ref_code")
+            message = form.cleaned_data.get("message")
+            email = form.cleaned_data.get("email")
+            # edit the order
+            try:
+                order = Order.objects.get(ref_code=ref_code)
+                order.refund_requested = True
+                order.save()
+
+                # store the refund
+                refund = Refund()
+                refund.order = order
+                refund.reason = message
+                refund.email = email
+                refund.save()
+
+                messages.info(self.request, "Recebemos o seu pedido de reembolso.")
+                return redirect("core:request-refund")
+
+            except ObjectDoesNotExist:
+                messages.info(self.request, "Esse pedido não existe.")
+                return redirect("core:request-refund")
+
 
 def search(request):
 
-    if 'term' in request.GET:
-        qs = Product.objects.filter(name__icontains=request.GET.get('term'))
-        print(qs)
+    if "term" in request.GET:
+        qs = Product.objects.filter(name__icontains=request.GET.get("term"))
+
         names = list()
         for product in qs:
             names.append(product.name)
-        return JsonResponse(names, safe=False)    
-    
-    q=request.GET['q']
+        return JsonResponse(names, safe=False)
+
+    q = request.GET["q"]
     products = Product.objects.filter(name__icontains=q)
-    return render(request, "search_results.html", {"products": products})
+    return render(request, "user/search_results.html", {"products": products})
 
 
+@login_required
+def user_orders(request):
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(ordered=True)
+    return render(request, "user/user_orders.html", {"orders": orders})
+
+
+from paypalcheckoutsdk.orders import OrdersGetRequest
+
+from .paypal import PayPalClient
+
+
+@login_required
+def payment_complete(request):
+
+    print("ok1111")
+    try:
+        order = Order.objects.get(user=request.user, ordered=False)
+        print(order)
+
+        print("ok22222")
+
+        PPClient = PayPalClient()
+        print(PPClient)
+
+        print("okAAAAA")
+
+        body = json.loads(request.body)
+
+        print("okBBBB")
+        data = body["orderID"]
+
+        print("okCCCCCCCC")
+
+        requestorder = OrdersGetRequest(data)
+        response = PPClient.client.execute(requestorder)
+        print("ok3333333")
+        print(response.result.id)
+
+        try:
+            print("ok444444")
+
+            payment = Payment()
+            print("ok555555")
+            payment.charge_id = response.result.id
+            print("ok66666666")
+            payment.user = request.user
+            payment.amount = order.get_total_frete()
+            payment.save()
+            print("77777777")
+
+            order.ordered = True
+            order.payment_option = "P"
+            order.payment = payment
+            order.ref_code = create_ref_code()
+            order.save()
+
+            order_items = order.items.all()
+            order_items.update(ordered=True)
+            for item in order_items:
+                item.save()
+
+            return redirect("core:payment_success")
+        except Exception as e:
+            # send an email to ourselves
+            messages.warning(request, "A serious error occurred. We have been notifed.")
+            return redirect("/")
+
+    except Exception as e:
+        messages.warning(request, "A serious error occurred. We have been notifed.")
+        return redirect("/")
+
+
+class PaymentView(View):
+    def get(self, *args, **kwargs):
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        if order.billing_address:
+            context = {"order": order, "DISPLAY_COUPON_FORM": False, "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY}
+            userprofile = self.request.user.userprofile
+            if userprofile.one_click_purchasing:
+                # fetch the users card list
+                cards = stripe.Customer.list_sources(userprofile.stripe_customer_id, limit=3, object="card")
+                card_list = cards["data"]
+                if len(card_list) > 0:
+                    # update the context with the default card
+                    context.update({"card": card_list[0]})
+            return render(self.request, "user/payment.html", context)
+        else:
+            messages.warning(self.request, "Você ainda não adicionou nenhum endereço para a compra")
+            return redirect("core:delivery_address")
+
+    def post(self, *args, **kwargs):
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        form = PaymentForm(self.request.POST)
+        userprofile = UserProfile.objects.get(user=self.request.user)
+        if form.is_valid():
+            token = form.cleaned_data.get("stripeToken")
+            save = form.cleaned_data.get("save")
+            use_default = form.cleaned_data.get("use_default")
+
+            if save:
+                if userprofile.stripe_customer_id != "" and userprofile.stripe_customer_id is not None:
+                    customer = stripe.Customer.retrieve(userprofile.stripe_customer_id)
+
+                    customer.sources.create(source=token)
+
+                else:
+                    customer = stripe.Customer.create(
+                        email=self.request.user.email,
+                    )
+                    customer.sources.create(source=token)
+                    userprofile.stripe_customer_id = customer["id"]
+                    userprofile.one_click_purchasing = True
+                    userprofile.save()
+
+            amount = int(order.get_total() * 100)
+
+            try:
+
+                if use_default or save:
+                    # charge the customer because we cannot charge the token more than once
+                    charge = stripe.Charge.create(amount=amount, currency="usd", customer=userprofile.stripe_customer_id)  # cents
+                else:
+                    # charge once off on the token
+                    charge = stripe.Charge.create(amount=amount, currency="usd", source=token)  # cents
+
+                # create the payment
+                payment = Payment()
+                payment.charge_id = charge["id"]
+                payment.user = self.request.user
+                payment.amount = order.get_total_frete()
+                payment.save()
+
+                # assign the payment to the order
+
+                order_items = order.items.all()
+                order_items.update(ordered=True)
+                for item in order_items:
+                    item.save()
+
+                order.ordered = True
+                order.payment = payment
+                order.payment_option = "S"
+                order.ref_code = create_ref_code()
+                order.save()
+
+                messages.success(self.request, "Your order was successful!")
+                return redirect("core:payment_success")
+
+            except stripe.error.CardError as e:
+                body = e.json_body
+                err = body.get("error", {})
+                messages.warning(self.request, f"{err.get('message')}")
+                return redirect("/")
+
+            except stripe.error.RateLimitError as e:
+                # Too many requests made to the API too quickly
+                messages.warning(self.request, "Rate limit error")
+                return redirect("/")
+
+            except stripe.error.InvalidRequestError as e:
+                # Invalid parameters were supplied to Stripe's API
+
+                messages.warning(self.request, "Invalid parameters")
+                return redirect("/")
+
+            except stripe.error.AuthenticationError as e:
+                # Authentication with Stripe's API failed
+                # (maybe you changed API keys recently)
+                messages.warning(self.request, "Not authenticated")
+                return redirect("/")
+
+            except stripe.error.APIConnectionError as e:
+                # Network communication with Stripe failed
+                messages.warning(self.request, "Network error")
+                return redirect("/")
+
+            except stripe.error.StripeError as e:
+                # Display a very generic error to the user, and maybe send
+                # yourself an email
+                messages.warning(self.request, "Something went wrong. You were not charged. Please try again.")
+                return redirect("/")
+
+            except Exception as e:
+                # send an email to ourselves
+                messages.warning(self.request, "A serious error occurred. We have been notifed.")
+                return redirect("/")
+
+        messages.warning(self.request, "Invalid data received")
+        return redirect("/payment/stripe/")

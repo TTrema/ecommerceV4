@@ -1,30 +1,44 @@
-from django.urls import path
+from django.urls import include, path
+
 from .views import (
-    homepage,
-    product_detail,
-    category_list,
-    brand_list,
-    OrderSummaryView,
-    add_to_cart,
-    remove_single_item_from_cart,
-    remove_from_cart,
-    view_address,
-    add_address,
-    edit_address,
-    delete_address,
-    set_default,
-    delivery_address,
     AddCouponView,
+    OrderSummaryView,
+    PaymentView,
+    RequestRefundView,
+    add_address,
+    add_to_cart,
+    brand_list,
     calculate_shipping,
+    category_list,
+    delete_address,
+    delete_coupon,
+    delivery_address,
+    edit_address,
+    edit_details,
+    homepage,
+    payment_complete,
+    payment_success,
+    paypal,
+    product_detail,
+    remove_from_cart,
+    remove_single_item_from_cart,
     search,
-
+    set_default,
+    user_orders,
+    view_address,
 )
-
 
 app_name = "core"
 
 urlpatterns = [
     path("", homepage, name="store_home"),
+    path("profile/edit/", edit_details, name="edit_details"),
+    path("paypal/", paypal, name="paypal"),
+    path("pagamento/<payment_option>/", PaymentView.as_view(), name="payment"),
+    path("pagamento-completado/", payment_complete, name="payment_complete"),
+    path("pagamento-feito/", payment_success, name="payment_success"),
+    path("reembolso/", RequestRefundView.as_view(), name="request-refund"),
+    path("user-orders/", user_orders, name="user_orders"),
     path("produto/<slug:slug>/", product_detail, name="product_detail"),
     path("categorias/<slug:category_slug>/", category_list, name="category_list"),
     path("marcas/<slug:brand_slug>/", brand_list, name="brand_list"),
@@ -38,12 +52,8 @@ urlpatterns = [
     path("endereco/deletar/<slug:id>/", delete_address, name="delete_address"),
     path("enderecos/set_default/<slug:id>/", set_default, name="set_default"),
     path("endereco-de-entrega/", delivery_address, name="delivery_address"),
-    path('add-coupon/', AddCouponView.as_view(), name='add-coupon'),
-    path('frete/', calculate_shipping, name='calculate_shipping'),
-    path('pesquisa/', search, name='product_search'),
-
-
-
+    path("add-coupon/", AddCouponView.as_view(), name="add-coupon"),
+    path("del-coupon/", delete_coupon, name="del-coupon"),
+    path("frete/", calculate_shipping, name="calculate_shipping"),
+    path("pesquisa/", search, name="product_search"),
 ]
-
-

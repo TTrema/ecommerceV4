@@ -155,7 +155,8 @@
     
       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         <a class="dropdown-item" href="{% url 'core:addresses' %}">Endereços</a>
-        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="{% url 'core:edit_details' %}">Cadastro</a>
+        <a class="dropdown-item" href="{% url 'core:user_orders' %}">Seus Pedidos</a>
         <li><hr class="dropdown-divider" /></li>
         <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
       </div>
@@ -166,7 +167,7 @@
       <span class="clearfix d-none d-sm-inline-block"> Login </span>
     </a>
     <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
-      <span class="clearfix d-none d-sm-inline-block"> Signup </span>
+      <span class="clearfix d-none d-sm-inline-block"> Cadastro </span>
     </a>
 
 

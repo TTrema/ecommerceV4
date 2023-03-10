@@ -8,8 +8,8 @@
     {% for order_item in order.items.all %}   
     <li class="list-group-item d-flex justify-content-between lh-condensed">
         <div>
-        <h5 class="my-0">{{ order_item.quantity }} x {{ order_item.product.name}}</h5>
-        
+        <h5 class="my-0">{{ order_item.quantity }} x {{ order_item.product.name|truncatechars:42 }}</h5>
+    
         </div>
         <span class="text-muted">R$ {{ order_item.get_final_price }}</span>
     </li>
@@ -17,15 +17,19 @@
     {% if order.coupon %}
     <li class="list-group-item d-flex justify-content-between bg-light">
         <div class="text-success">
-        <h6 class="my-0">Promo code</h6>
+        <h6 class="my-0">Cupom</h6>
         <small>{{ order.coupon.code }}</small>
+
+        <small><a href="{% url 'core:del-coupon' %}" class="text-decoration-none">Remover cupom</a></small>
         </div>
-        <span class="text-success">-${{ order.coupon.amount }}</span>
+        <span class="text-success">-R$ {{ order.coupon.amount }}</span>
+        
     </li>
+    
     {% endif %}
     <li class="list-group-item d-flex justify-content-between">
-        <span>Total (USD)</span>
-        <strong>${{ order.get_total }}</strong>
+        <span>Total </span>
+        <strong>R$ {{ order.get_total }}</strong>
     </li>
     </ul>
 
@@ -51,15 +55,46 @@
   {% endif %}
 
   
-
+<div class="my-4"> 
 
 
   <h4 class="d-flex justify-content-between align-items-center mb-3">
     <span class="text-muted">Frete</span>
     </h4>
+  </div>
     <ul class="list-group mb-3 z-depth-1">  
+
     {% if shipping_cost %}
-    <li class="list-group-item d-flex justify-content-between lh-condensed">
+    
+    
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="shipping_method"  id="pac" value="P" {% if shipping_type == "P" %} checked {% endif %}>
+          <label class="form-check-label" for="pac">
+            PAC
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="shipping_method"  id="sedex" value="S" {% if shipping_type == "S" %} checked {% endif %}>
+          <label class="form-check-label" for="sedex">
+            Sedex          
+          </label>
+        </div>
+      </li>
+    </ul>
+    
+    <li class="list-group-item d-flex justify-content-between lh-condensed ">
+      
+      <div>
+      <h5 class="my-0">Tipo do Frete Selecionado:</h5>       
+      </div>
+      <span class="text-muted">{{ order.get_delivery_type_display }}</span>
+  </li>
+
+
+    <li class="list-group-item d-flex justify-content-between lh-condensed ">
+      
         <div>
         <h5 class="my-0">Valor do frete:</h5>       
         </div>
@@ -71,6 +106,12 @@
         </div>
         <span class="text-muted">{{ shipping_cost.1 }} dias</span>
     </li>
+    <li class="list-group-item d-flex justify-content-between lh-condensed">
+      <div>
+      <h5 class="my-0">Valor Total dos produtos com o Frete:</h5>       
+      </div>
+      <span class="text-muted">R$ {{ order.get_total_frete }}</span>
+  </li>
     {% else %}
     <li class="list-group-item d-flex justify-content-between lh-condensed">
       <div>
@@ -81,4 +122,34 @@
 
 </div>
 
-
+<script>
+  $(document).ready(function() {
+    // Adiciona um evento de escuta para a mudança de valor do radio
+    $('input[type="radio"][name="shipping_method"]').change(function() {
+      // Pega a posição atual do usuário
+      var scrollPosition = $(window).scrollTop();
+      // Pega o valor do radio selecionado
+      var shipping_method = $(this).val();
+      // Faz uma solicitação AJAX para a view do Django
+      $.ajax({
+        url: "{% url 'core:delivery_address' %}",
+        type: "POST",
+        data: {
+          'shipping_method': shipping_method,
+          'csrfmiddlewaretoken': "{{ csrf_token }}"
+        },
+        success: function(response) {
+          // Atualiza a página com os novos dados
+          $('#result-container').html(response);
+          // Restaura a posição atual do usuário após a atualização da página
+          $(window).scrollTop(scrollPosition);
+          location.reload();
+        },
+        error: function(xhr, status, error) {
+          // Trata erros de solicitação
+          console.log(xhr.responseText);
+        }
+      });
+    });
+  });
+</script>

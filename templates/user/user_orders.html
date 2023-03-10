@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 {% block title %}User Orders{% endblock %}
 
-{% block sub_content %}
+{% block content %}
 
-<div class="col-12">
-  <h1 class="h2">User Orders</h1>
-</div>
-<div class="col-12 d-flex justify-content-between">
-  <div>Manage your <b>orders</b> and personal details</div>
+<div class="col-12" style="text-align: center;;">
+  <h1 class="h2">Os seus Pedidos</h1>
+  <div>Veja aqui os seus <b>Pedidos</b></div>
 </div>
 <hr />
  <div class="container">
@@ -15,7 +13,7 @@
     <div class="row g-3">
       <div class="col-12 bg-light p-3 d-flex justify-content-between">
         <div class="d-flex d-flex-inline">
-          <div class="pe-3">{{ order.created }}</div>
+          <div class="pe-3">{{ order.billing_address }}</div>
           <div class="dropdown">
           <a class="text-reset text-decoration-none dropdown-toggle" href="#" role="link" id="dropdownLink" data-bs-toggle="dropdown" aria-expanded="false">
           Dispacted to 
@@ -25,9 +23,9 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="dropdownLink">
             <li class="item small">{{order.full_name}}</li>
-            <li class="item small">{{order.address1}}</li>
-            <li class="item small">{{order.address2}}</li>
-            <li class="item small">{{order.post_code}}</li>
+            <li class="item small">{{order.billing_address}}</li>
+            <li class="item small">{{order.items}}</li>
+            <li class="item small">{{order.get_total}}</li>
           </ul>
           </div>
         </div>
