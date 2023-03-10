@@ -62,22 +62,31 @@
                         </span>
                         <span>R$ {{ product.discount_price }}</span><span class="badge bg-danger ms-2"> - {{ product.offprice }}%</span>
                         {% else %}
-                        <span>R$ {{ product.price }}</span>
+                        <h5>R$ {{ product.price }}</h5>
                         {% endif %}     
                     </p>
 
-                    <strong><p style="font-size: 20px;">Descrição</p></strong>
 
-                    <p>{{ product.description }}</p>
 
-                    <a href="{{ product.get_add_to_cart_url }}" class="btn btn-primary ms-1">
+                    <a type="button" class="btn btn-success fw500 btn-sm " href="{% url 'core:user_wishlist' product.id %}">{{ wishlist }}</a>
+
+                    <div>  <a href="{{ product.get_add_to_cart_url }}" class="btn btn-primary ms-1 my-4">
                         Adicionar ao Carrinho
                         <i class="fas fa-shopping-cart ms-1"></i>
                     </a>
-                    {% comment %} <a href="{{ product.get_remove_from_cart_url }}" class="btn btn-danger ms-1">
-                        Remove from cart
-                    </a> {% endcomment %}
 
+
+                    <strong><p style="font-size: 20px;">Descrição</p></strong>
+
+
+                    <p>{{ product.description }}</p>
+
+  
+                  
+                    </div>
+
+
+                    
                 </div>
                 <!--Content-->
             </div>

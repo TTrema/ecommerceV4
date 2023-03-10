@@ -97,6 +97,9 @@ class OrderItem(models.Model):
         if self.product.discount_price:
             return self.get_total_discount_item_price()
         return self.get_total_item_price()
+    
+    class Meta:
+        ordering = ['id']
 
 
 class Order(models.Model):

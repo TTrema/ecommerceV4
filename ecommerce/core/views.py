@@ -86,8 +86,13 @@ def edit_details(request):
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, available=True)
     product2 = Product.objects.filter(~Q(slug=slug) & Q(available=True))[:4]
-    brand = product.brand  # acessa o objeto Brand relacionado ao objeto Product
-    return render(request, "product.html", {"product": product, "product2": product2, "brand": brand})
+    brand = product.brand  
+    if product.users_wishlist.filter(id=request.user.id).exists():
+        wishlist = 'Remover da lista de desejos'
+
+    else:
+        wishlist = 'Adicionar a sua lista de desejos'
+    return render(request, "product.html", {"product": product, "product2": product2, "brand": brand, "wishlist": wishlist})
 
 
 def get_descendants(category):
@@ -110,44 +115,15 @@ def brand_list(request, brand_slug=None):
     return render(request, "brand.html", {"brand": brand, "products": products})
 
 
-class AddToCartView(LoginRequiredMixin, View):
-    def get(self, request, slug):
-        product = get_object_or_404(Product, slug=slug)
-        order_item, created = OrderItem.objects.get_or_create(product=product, user=request.user, ordered=False)
-        order_qs = Order.objects.filter(user=request.user, ordered=False)
-
-        if order_qs.exists():
-            order = order_qs[0]
-            # check if the order item is in the order
-            if order.items.filter(product__slug=product.slug).exists():
-                order_item.quantity += 1
-                order_item.save()
-                return redirect("core:order-summary")
-            else:
-                order.items.add(order_item)
-                return redirect("core:order-summary")
-        else:
-            ordered_date = timezone.now()
-            order = Order.objects.create(user=request.user, ordered_date=ordered_date)
-            order.items.add(order_item)
-            return redirect("core:order-summary")
-
 
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         try:
-            order = Order.objects.get(user=request.user, ordered=False)
+            order = Order.objects.filter(user=request.user, ordered=False).order_by('-start_date').first()
             context = {"object": order}
             return render(request, "user/order_summary.html", context)
         except Order.DoesNotExist:
             return render(request, "user/order_summary.html", {"message": "Você não tem nenhum item em seu carrinho"})
-
-
-# @login_required
-# def order_summary(request):
-#     order_items = OrderItem.objects.filter(user=request.user, ordered=False)
-#     context = {"order_items": order_items}
-#     return render(request, "user/order_summary.html", context)
 
 
 @login_required
@@ -229,17 +205,24 @@ def view_address(request):
 @login_required
 def add_address(request):
     if request.method == "POST":
+        checkout = request.GET.get('checkout')
         address_form = UserAddressForm(data=request.POST)
         if address_form.is_valid():
             address_form = address_form.save(commit=False)
             address_form.user = request.user
             address_form.save()
+            if checkout == 'checkout':
+                next = "core:delivery_address"
+
+            else:
+                next = "core:addresses"
+            
             if Address.objects.filter(user=request.user, default=True).exists():
-                return HttpResponseRedirect(reverse("core:addresses"))
+                return HttpResponseRedirect(reverse(next))
 
             else:
                 Address.objects.filter(user=request.user).update(default=True)
-                return HttpResponseRedirect(reverse("core:addresses"))
+                return HttpResponseRedirect(reverse(next))
 
     else:
         address_form = UserAddressForm()
@@ -248,12 +231,17 @@ def add_address(request):
 
 @login_required
 def edit_address(request, id):
+    
     if request.method == "POST":
+        checkout = request.GET.get('checkout')
         address = Address.objects.get(pk=id, user=request.user)
         address_form = UserAddressForm(instance=address, data=request.POST)
         if address_form.is_valid():
             address_form.save()
-            return HttpResponseRedirect(reverse("core:addresses"))
+            if checkout == 'checkout':
+                return HttpResponseRedirect(reverse("core:delivery_address"))
+            else:              
+                return HttpResponseRedirect(reverse("core:addresses"))
     else:
         address = Address.objects.get(pk=id, user=request.user)
         address_form = UserAddressForm(instance=address)
@@ -277,6 +265,28 @@ def set_default(request, id):
         return redirect("core:delivery_address")
 
     return redirect("core:addresses")
+
+
+@login_required
+def wishlist(request):
+    products = Product.objects.filter(users_wishlist=request.user)
+
+    return render(request, "user/user_wish_list.html", {"wishlist": products})
+
+
+@login_required
+def add_to_wishlist(request, id):
+    product = get_object_or_404(Product, id=id)
+    if product.users_wishlist.filter(id=request.user.id).exists():
+        product.users_wishlist.remove(request.user)
+        messages.success(request, "O produto " + product.name + " foi removido da sua lista de desejos")
+
+    else:
+        product.users_wishlist.add(request.user)
+        messages.success(request, "O produto " + product.name + " foi adicionado a sua lista de desejos")
+
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
 
 
 def calculate_shipping(zip_code, shipping_method):
@@ -335,13 +345,17 @@ def delivery_address(request):
     print(order.ordered)
     addresses = Address.objects.filter(user=request.user).order_by("-default")
     shipping_type = get_object_or_404(Order, user=request.user, ordered=False)
-    default_address = Address.objects.get(user=request.user, default=True)
-    shipping_cost = calculate_shipping(default_address.zip_code, shipping_type.delivery_type)
-    print(order.get_total_frete())
+    
+    try:
+        default_address = Address.objects.get(user=request.user, default=True)
+        shipping_cost = calculate_shipping(default_address.zip_code, shipping_type.delivery_type)
+        print(order.get_total_frete())
 
-    order.delivery_price = shipping_cost[0]
-    order.shipping_address = default_address
-    order.save()
+        order.delivery_price = shipping_cost[0]
+        order.shipping_address = default_address
+        order.save()
+    except Address.DoesNotExist:
+        shipping_cost = None # ou fazer qualquer outra ação caso o objeto não exista
 
     # if "address" not in request.session:
     #     session["address"] = {"address_id": str(addresses[0].id)}
@@ -404,9 +418,11 @@ class AddCouponView(View):
 
 
 class RequestRefundView(View):
+    
     def get(self, *args, **kwargs):
-        form = RefundForm()
-        context = {"form": form}
+        ref_code_item = self.request.GET.get('ref_code')
+        form = RefundForm(initial={'ref_code': ref_code_item} if ref_code_item else None)
+        context = {"form": form, 'ref_code_item':ref_code_item}
         return render(self.request, "user/request_refund.html", context)
 
     def post(self, *args, **kwargs):
@@ -455,6 +471,7 @@ def search(request):
 def user_orders(request):
     user_id = request.user.id
     orders = Order.objects.filter(user_id=user_id).filter(ordered=True)
+    print(orders)
     return render(request, "user/user_orders.html", {"orders": orders})
 
 

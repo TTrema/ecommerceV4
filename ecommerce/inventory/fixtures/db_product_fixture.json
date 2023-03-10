@@ -1,98 +1,138 @@
 [
-  {
+{
     "model": "inventory.product",
     "pk": 1,
     "fields": {
-      "name": "Red T-shirt",
-      "slug": "red-tshirt",
-      "brand": 1,
-      "category": 1,
-      "description": "A comfortable and stylish red t-shirt for everyday wear.",
-      "price": 19.99,
-      "discount_price": null,
-      "available": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "Essential Goethe",
+        "slug": "essential-goethe",
+        "brand": 1,
+        "category": 2,
+        "description": "\"Essential Goethe\" é uma coletânea de escritos selecionados do famoso escritor, poeta e cientista alemão Johann Wolfgang von Goethe. A obra abrange uma variedade de gêneros literários, desde poesia e prosa até teatro e ensaios científicos, e oferece uma visão abrangente da obra e vida do autor. A coletânea inclui algumas das obras mais famosas de Goethe, como \"Fausto\" e \"Os Sofrimentos do Jovem Werther\". A seleção dos escritos foi realizada pelo editor e tradutor Matthew Bell.",
+        "price": "70.00",
+        "discount_price": "50.00",
+        "available": true,
+        "created_at": "2023-03-10T21:12:47.269Z",
+        "updated_at": "2023-03-10T21:23:04.630Z",
+        "users_wishlist": []
     }
-  },
-  {
+},
+{
     "model": "inventory.product",
     "pk": 2,
     "fields": {
-      "name": "Blue Jeans",
-      "slug": "blue-jeans",
-      "brand": 2,
-      "category": 2,
-      "description": "A classic pair of blue jeans, perfect for any occasion.",
-      "price": 49.99,
-      "discount_price": 19.99,
-      "available": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "Dead Astronauts",
+        "slug": "dead-astronauts",
+        "brand": 2,
+        "category": 3,
+        "description": "\"Dead Astronauts\" é um romance de ficção científica do autor Jeff Vandermeer. O livro apresenta uma história complexa que segue três personagens - Grayson, Moss e Chen - em um mundo pós-apocalíptico. Os personagens lutam para sobreviver em meio a um ambiente devastado e alienígena, enquanto tentam encontrar uma maneira de voltar para casa e desvendar a verdade sobre a organização misteriosa que os enviou para lá. A narrativa se desenvolve em torno de temas como identidade, tempo e realidade, e apresenta elementos surrealistas e experimentais. \"Dead Astronauts\" é uma obra ambiciosa e desafiadora, que explora as fronteiras da ficção científica e desafia as convenções do gênero.",
+        "price": "66.99",
+        "discount_price": null,
+        "available": true,
+        "created_at": "2023-03-10T21:15:12.095Z",
+        "updated_at": "2023-03-10T21:21:48.751Z",
+        "users_wishlist": []
     }
-  },
-  {
+},
+{
     "model": "inventory.product",
     "pk": 3,
     "fields": {
-      "name": "Black Boots",
-      "slug": "black-boots",
-      "brand": 3,
-      "category": 3,
-      "description": "A sleek pair of black leather boots, great for any outfit.",
-      "price": 79.99,
-      "discount_price": null,
-      "available": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "The Book of Strange New Things",
+        "slug": "TheBookofStrangeNewThings",
+        "brand": 3,
+        "category": 3,
+        "description": "\"The Book of Strange New Things\" é um romance de ficção científica escrito por Michel Faber. A história segue Peter Leigh, um pastor cristão que é selecionado para fazer parte de uma missão missionária em um planeta distante chamado Oasis. Enquanto Peter tenta estabelecer uma comunicação com os habitantes alienígenas de Oasis e difundir a sua religião, ele começa a receber notícias cada vez mais estranhas e perturbadoras de sua esposa, que ficou na Terra. O livro explora temas como religião, fé, amor e identidade em um contexto de ficção científica, criando um mundo imaginativo e intrigante que combina elementos de diferentes gêneros literários. A narrativa é envolvente e emocionante, oferecendo uma reflexão sobre as complexidades do relacionamento humano e a busca por um significado maior na vida.",
+        "price": "87.88",
+        "discount_price": "49.99",
+        "available": true,
+        "created_at": "2023-03-10T21:20:18.409Z",
+        "updated_at": "2023-03-10T21:21:17.298Z",
+        "users_wishlist": []
     }
-  },
-  {
+},
+{
     "model": "inventory.product",
     "pk": 4,
     "fields": {
-      "name": "Yellow Raincoat",
-      "slug": "yellow-raincoat",
-      "brand": 4,
-      "category": 4,
-      "description": "Stay dry in style with this bright yellow raincoat.",
-      "price": 59.99,
-      "discount_price": 39.99,
-      "available": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "Smartphone Motorola Moto G22 128GB 4GB RAM Azul",
+        "slug": "SmartphoneMotorolaMoto",
+        "brand": 4,
+        "category": 4,
+        "description": "O Motorola Moto G22 é um smartphone de gama média com 128 GB de armazenamento interno e 4 GB de RAM. Ele possui uma tela de 6,5 polegadas, câmera traseira quádrupla de 48 MP + 8 MP + 2 MP + 2 MP e uma bateria de 5.000 mAh. O Moto G22 roda o Android 11 e tem recursos como leitor de impressão digital e desbloqueio facial.",
+        "price": "1699.00",
+        "discount_price": "1130.99",
+        "available": true,
+        "created_at": "2023-03-10T21:28:29.695Z",
+        "updated_at": "2023-03-10T22:19:12.110Z",
+        "users_wishlist": []
     }
-  },
-  {
+},
+{
     "model": "inventory.product",
     "pk": 5,
     "fields": {
-      "name": "Green Running Shoes",
-      "slug": "green-running-shoes",
-      "brand": 5,
-      "category": 5,
-      "description": "A comfortable pair of running shoes in a vibrant green color.",
-      "price": 59.99,
-      "discount_price": null,
-      "available": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "Notebook Lenovo IdeaPad 3i i5-1135G7 8GB 256GB SSD Placa de Vídeo Intel Iris Xe Windows 11 15.6', Cinza, 82MD0007BR",
+        "slug": "NotebookLenovoIdeaPad3i",
+        "brand": 5,
+        "category": 6,
+        "description": "Sobre este item\r\n\r\n    Processador Core i5 11a geracao\r\n    Placa de video integrada Intel Iris Xe\r\n    Armazenamento SSD PCIe, que é 10x mais rápido que um HDD 2.5” SATA\r\n    Com porta de privacidade da webcam",
+        "price": "4799.00",
+        "discount_price": "2899.00",
+        "available": true,
+        "created_at": "2023-03-10T21:34:53.798Z",
+        "updated_at": "2023-03-10T21:34:53.798Z",
+        "users_wishlist": []
     }
-  },
-  {
+},
+{
     "model": "inventory.product",
     "pk": 6,
     "fields": {
-      "name": "Purple Dress",
-      "slug": "purple-dress",
-      "brand": 5,
-      "category": 6,
-      "description": "A beautiful purple dress, perfect for special occasions.",
-      "price": 99.99,
-      "discount_price": 39.99,
-      "available": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "The King Of Fighters XV - Lançamento - Playstation 5",
+        "slug": "TheKingOfFightersXV",
+        "brand": 6,
+        "category": 8,
+        "description": "Funcionalidades do Jogo: No total, são 39 personagens: Personagens clássicos célebres, personagens revividos, personagens novos e muito mais; o confronto mais épico da história de KOF está prestes a começar\r\n    A história de KOF chega ao clímax: A nova saga de KOF contínua de onde a história do jogo anterior parou; desta vez, a narrativa chega a um clímax explosivo\r\n    O ápice do sistema de batalha da série: Além de manter o tradicional sistema de batalha 3 contra 3 da série, KOF XV também conta com um novo sistema; vivencie uma sensação de velocidade e inovação sem precedentes\r\n    Jogo online fácil e versátil: Rollback netc.ode adotado para reduzir o lag em partidas online; também há uma variedade de opções de batalha que permitem escolher como você quer jogar. KOF vem repleto de conteúdo para você: Inclui uma galera de vídeos e vozes, e a nova DJ STATION, com mais de 300 músicas célebres da série KOF e muito mais",
+        "price": "344.99",
+        "discount_price": null,
+        "available": true,
+        "created_at": "2023-03-10T21:39:52.102Z",
+        "updated_at": "2023-03-10T21:43:02.122Z",
+        "users_wishlist": []
     }
-  }
+},
+{
+    "model": "inventory.product",
+    "pk": 7,
+    "fields": {
+        "name": "Blusão",
+        "slug": "Blusas",
+        "brand": 7,
+        "category": 10,
+        "description": "Modelagem tradicional.\r\n    Decote: redondo.\r\n    Manga longa.",
+        "price": "49.99",
+        "discount_price": null,
+        "available": true,
+        "created_at": "2023-03-10T21:42:43.631Z",
+        "updated_at": "2023-03-10T21:42:43.631Z",
+        "users_wishlist": []
+    }
+},
+{
+    "model": "inventory.product",
+    "pk": 8,
+    "fields": {
+        "name": "Vinho The Grill Master Tinto",
+        "slug": "VinhoTheGrill",
+        "brand": 8,
+        "category": 12,
+        "description": "Sobre este item\r\n\r\nvinho argentino tinto\r\nProdutos com garantia de qualidade.\r\nOs produtos foram projetados com o usuário em mente querendo cumprir os desejos.\r\nAlimentos e Bebidas. Categorias: Bebidas Alcoólicas, Vinho, Vinho Tinto\r\n\r\nA BEBIDA ALCOÓLICA PODE CAUSAR DEPENDÊNCIA QUÍMICA E, EM EXCESSO, PROVOCA GRAVES MALES À SAÚDE. A VENDA DE BEBIDAS ALCOÓLICAS É PROIBIDA PARA MENORES DE 18 ANOS. BEBA COM MODERAÇÃO.",
+        "price": "26.90",
+        "discount_price": null,
+        "available": true,
+        "created_at": "2023-03-10T21:45:42.253Z",
+        "updated_at": "2023-03-10T21:45:42.253Z",
+        "users_wishlist": []
+    }
+}
 ]

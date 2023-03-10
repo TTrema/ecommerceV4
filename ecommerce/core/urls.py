@@ -26,6 +26,8 @@ from .views import (
     set_default,
     user_orders,
     view_address,
+    wishlist,
+    add_to_wishlist,
 )
 
 app_name = "core"
@@ -56,4 +58,6 @@ urlpatterns = [
     path("del-coupon/", delete_coupon, name="del-coupon"),
     path("frete/", calculate_shipping, name="calculate_shipping"),
     path("pesquisa/", search, name="product_search"),
+    path("wishlist", wishlist, name="wishlist"),
+    path("wishlist/add_to_wishlist/<int:id>", add_to_wishlist, name="user_wishlist"),
 ]

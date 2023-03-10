@@ -16,3 +16,13 @@
 #form-control.mb-4 {
   margin-bottom: 5rem;
 }
+
+.dropdown-item:hover {
+  background-color: blue;
+  color: white;
+}
+
+#dropdown-item:hover {
+  background-color: blue;
+  color: white;
+}

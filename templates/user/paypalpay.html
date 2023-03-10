@@ -3,182 +3,76 @@
 {% block extra_head %}
 <style>
 
-#stripeBtnLabel {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 16px;
-  font-variant: normal;
-  padding: 0;
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  font-weight: 500;
-  display: block;
-}
-
-#stripeBtn {
-  border: none;
-  border-radius: 4px;
-  outline: none;
-  text-decoration: none;
-  color: #fff;
-  background: #32325d;
-  white-space: nowrap;
-  display: inline-block;
-  height: 40px;
-  line-height: 40px;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
-  border-radius: 4px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  text-decoration: none;
-  -webkit-transition: all 150ms ease;
-  transition: all 150ms ease;
-  float: left;
-  width: 100%
-}
-
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
-  background-color: #43458b;
-}
-
-.stripe-form {
-  padding: 5px 30px;
-}
-
-#card-errors {
-  height: 20px;
-  padding: 4px 0;
-  color: #fa755a;
-}
-
-.stripe-form-row {
-  width: 100%;
-  float: left;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-/**
- * The CSS shown here will not be introduced in the Quickstart guide, but shows
- * how you can use CSS to style your Element's container.
- */
-.StripeElement {
-  box-sizing: border-box;
-
-  height: 40px;
-
-  padding: 10px 12px;
-
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: white;
-
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;der_sni
-}
-
-.StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
-}
-
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
-}
-
-.current-card-form {
-  display: none;
-}
-
 </style>
 {% endblock extra_head %}
 
 {% block content %}
 
-  <main >
-    <body style="text-align: center; height: 100vh;">
-    <div class="container wow fadeIn">
-
-      <h2 class="my-5 h2 text-center">Pagar com paypal</h2>    
-
-      <div class="row">
 
 
-        <div id="paypal-button-container"></div>
-      </div>
-      </div>
-      </div>
-      <script
-      src="https://www.paypal.com/sdk/js?client-id={{ paypalid }}&currency=BRL"
-      data-sdk-integration-source="button-factory">
-      </script>
-      <script>
-      function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-      }
-      var csrftoken = getCookie('csrftoken');
-      
-      
-      
-      function initPayPalButton() {
-      paypal.Buttons({
-        style: {
-          shape: 'rect',
-          color: 'gold',
-          layout: 'vertical',
-          label: 'paypal',
-      
-        },
-      createOrder: function (data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              "amount": {
-                "currency_code": "BRL",
-                "value": {{ paypaltotal }}
-              }
-            }]
-          });
-        },
-      onApprove: function (data) {
-        var url = "{% url 'core:payment_complete' %}"
-          return fetch(url, {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-              'X-CSRFToken': csrftoken,
+<body style="text-align: center; height: 100vh;">
+     <!-- Add meta tags for mobile and IE -->
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+     <title> PayPal Checkout Integration | Server Demo </title>
+ </head>
+ 
+ <body>
+     <!-- Set up a container element for the button -->
+     <form id='form'>
+      {% csrf_token %}
+     <div id="paypal-button-container"></div>
+ 
+     <!-- Include the PayPal JavaScript SDK -->
+     <script src="https://www.paypal.com/sdk/js?client-id={{ paypalid }}&currency=BRL"></script>
+ 
+     <script>
+         // Render the PayPal button into #paypal-button-container
+         paypal.Buttons({
+ 
+             // Call your server to set up the transaction
+             createOrder: function(data, actions) {
+           return actions.order.create({
+             purchase_units: [{
+               "amount": {
+                 "currency_code": "BRL",
+                 "value": {{ paypaltotal }}
+               }
+             }]
+           });
+         },
+                 
+             // Call your server to finalize the transaction
+
+
+             
+             onApprove: function(data, actions) {
+              var form = document.getElementById('form')
+              csrftoken = form.getElementsByTagName("input")[0].value
+              var url = "{% url 'core:payment_complete' %}"
+              return fetch(url, {
+                method: 'POST',
+                headers: {
+                  'content-type': 'application/json',
+                  'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({
+                  orderID: data.orderID
+                })
+              }).then(function () {
+                location.href = '';
+              })
             },
-            body: JSON.stringify({
-              orderID: data.orderID
-            })
-          }).then(function () {
-            location.href = '';
-          })
-        },
-      }).render('#paypal-button-container');
-      }
-      initPayPalButton();
-      
-      </script>           
+          }).render('#paypal-button-container');
+         
+          initPayPalButton();
+          
+          </script>  
 
-          </div>
-        </div>
+    </form>
+ </body>
+ 
+ </html>
         
         <ul class="list-group" style="max-width: 1000px; margin: auto;" >
           
@@ -228,13 +122,4 @@ button:hover {
   </main>
 
 {% endblock content %}
-
-{% block extra_scripts %}
-
-
-
-{% endblock extra_scripts %}
-
-
-
 

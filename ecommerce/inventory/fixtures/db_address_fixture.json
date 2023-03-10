@@ -1,31 +1,22 @@
 [
-    {
-      "model": "core.address",
-      "pk": 1,
-      "fields": {
-        "user": 2,
-        "street": "Rua A, 123",
-        "zip_code": "12345-678",
-        "city": "SÃ£o Paulo",
+{
+    "model": "core.address",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "full_name": "Diogo",
+        "zip_code": "04961230",
+        "city": "São Paulo",
         "state": "SP",
-        "country": "Brasil",
-        "created_at": "2023-03-05T22:17:43.350Z",
-        "updated_at": "2023-03-05T22:17:43.350Z"
-      }
-    },
-    {
-      "model": "core.address",
-      "pk": 2,
-      "fields": {
-        "user": 2,
-        "street": "Rua B, 456",
-        "zip_code": "98765-432",
-        "city": "Rio de Janeiro",
-        "state": "RJ",
-        "country": "Brasil",
-        "created_at": "2023-03-05T22:17:43.350Z",
-        "updated_at": "2023-03-05T22:17:43.350Z"
-      }
+        "bairro": "Vila Calu",
+        "street": "Travessa das Águas Duras",
+        "number": 11,
+        "complemento": null,
+        "phone": "1158997962",
+        "referencia": null,
+        "default": true,
+        "created_at": "2023-03-10T22:04:48.131Z",
+        "updated_at": "2023-03-10T22:04:48.131Z"
     }
-  ]
-  
+}
+]

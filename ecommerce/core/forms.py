@@ -105,8 +105,8 @@ class CouponForm(forms.Form):
 
 
 class RefundForm(forms.Form):
-    ref_code = forms.CharField()
-    message = forms.CharField(widget=forms.Textarea(attrs={"rows": 4}))
+    ref_code = forms.CharField(label='Código do pedido:')
+    message = forms.CharField(widget=forms.Textarea(attrs={"rows": 4}), label='Mensagem:')
     email = forms.EmailField()
 
 

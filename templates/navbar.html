@@ -1,187 +1,217 @@
-
 {% load cart_template_tags %}
 
+
+
+
 <!-- Navbar -->
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white">
-    <!-- Container wrapper -->
-    <div class="container">
-        <!-- Toggle button -->
-        <button 
-            class="navbar-toggler" 
-            type="button" 
-            data-mdb-toggle="collapse" 
-            data-mdb-target="#navbarSupportedContent1" 
-            aria-controls="navbarSupportedContent1" 
-            aria-expanded="false" 
-            aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-        </button>
+  <!-- Container wrapper -->
+  <div class="container">
+    <!-- Toggle button -->
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent1"
+      aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
 
-        <!-- Collapsible wrapper -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-            <!-- Navbar brand -->
-            <a class="navbar-brand mt-2 mt-sm-0" href="{% url "core:store_home" %}">
-                <img src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp" height="20" alt="MDB Logo" loading="lazy" />
-            </a>
-            <!-- Left links -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <!-- Container wrapper -->
-                <div class="container-fluid">
-                  <!-- Toggle button -->
-                  <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-mdb-toggle="collapse"
-                    data-mdb-target="#navbarLeftAlignExample"
-                    aria-controls="navbarLeftAlignExample"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                  >
-                    <i class="fas fa-bars"></i>
-                  </button>
-              
-                  <!-- Collapsible wrapper -->
-                  <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
-                    <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url "core:store_home" %}">Home</a>
-                      </li>
-
-                      <!-- Navbar dropdown -->
-                      <li class="nav-item dropdown">
-                        <a
-                          class="nav-link dropdown-toggle"
-                          href="#"
-                          id="navbarDropdown"
-                          role="button"
-                          data-mdb-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          Categorias
-                        </a>               
-
-
-                        <!-- Dropdown menu -->
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="{% url "core:store_home" %}">Todas as categorias</a>
-                          </li>
-                          <li><hr class="dropdown-divider" /></li>
-                          {% for c in categories %}
-                          <li {% if category.slug == c.slug %}class="selected" {% endif %}>
-                            <a class="dropdown-item" href="{{ c.get_absolute_url }}">{{ c.name|title }}</a>
-                          </li>
-                          {% endfor %}
-                        </ul>
-                      </li>
-                      
-                      <!-- Navbar dropdown -->
-                      <li class="nav-item dropdown">
-                        <a
-                          class="nav-link dropdown-toggle"
-                          href="#"
-                          id="navbarDropdown"
-                          role="button"
-                          data-mdb-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          Marcas
-                        </a>               
-
-
-                        <!-- Dropdown menu -->
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="{% url "core:store_home" %}">Todas as categorias</a>
-                          </li>
-                          <li><hr class="dropdown-divider" /></li>
-                          {% for c in brands %}
-                          <li {% if brand.slug == c.slug %}class="selected" {% endif %}>
-                            <a class="dropdown-item" href="{{ c.get_absolute_url }}">{{ c.title }}</a>
-                          </li>
-                          {% endfor %}
-                        </ul>
-                      </li>
-                      
-
-                      <nav class="">
-                        <div class="container-fluid">
-                          <form class="d-flex input-group w-auto" action="/pesquisa">
-                            <input
-                              id="searchproducts"
-                              name="q"
-                            
-                              class="form-control rounded"
-                              placeholder="Search"
-                              aria-label="Search"
-                              aria-describedby="search-addon"
-                            />
-                            <button class="input-group-text border-0" id="searchb">
-                              <i class="fas fa-search" type="submit"></i>
-                            </button>
-                          </form>
-                        </div>
-                      </nav>
-                    </ul>
-                    <!-- Left links -->
-                  </div>
-                  <!-- Collapsible wrapper -->
-                </div>
-                <!-- Container wrapper -->
-              </nav>
-
-            </ul>
-            
-            <!-- Left links -->
-        </div>
-        <!-- Collapsible wrapper -->
-
-        <!-- Right elements -->
-        {% if request.user.is_authenticated %}
-        <div class="d-flex align-items-center">
-            <!-- Icon -->
-            <a class="nav-link me-4" href="{% url 'core:order-summary' %}">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="badge rounded-pill badge-notification bg-danger">{{ request.user|cart_item_count }}</span>
-            </a>
-                  <!-- Icon dropdown -->
-
-    <div class="dropdown show">
-      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-       Minha Conta
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+      <!-- Navbar brand -->
+      <a class="navbar-brand mt-2 mt-sm-0" href="{% url "core:store_home" %}">
+        <img src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp" height="20" alt="MDB Logo"
+          loading="lazy" />
       </a>
-    
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item" href="{% url 'core:addresses' %}">Endereços</a>
-        <a class="dropdown-item" href="{% url 'core:edit_details' %}">Cadastro</a>
-        <a class="dropdown-item" href="{% url 'core:user_orders' %}">Seus Pedidos</a>
-        <li><hr class="dropdown-divider" /></li>
-        <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
-      </div>
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <!-- Container wrapper -->
+          <div class="container-fluid">
+            <!-- Toggle button -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+              data-mdb-target="#navbarLeftAlignExample" aria-controls="navbarLeftAlignExample" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
+              <!-- Left links -->
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url "core:store_home" %}">Home</a>
+                </li>
+
+
+                <!-- Navbar dropdown -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-mdb-toggle="dropdown" aria-expanded="false">
+                    Categorias
+                  </a>
+
+                  <!-- Dropdown menu -->
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #f8f9fa;">
+                    <li>
+                      <a class="dropdown-item" href="{% url "core:store_home" %}">Todas as categorias</a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider" />
+                    </li>
+                    {% for c in categories %}
+                    <li {% if category.slug == c.slug %}class="selected" {% endif %}>
+                      {% if c.children.all %}
+                      <div class="btn-group shadow-none dropright">
+                        <a class="dropdown-toggle" href="{{ c.get_absolute_url }}" role="button" aria-haspopup="true"
+                          aria-expanded="false"
+                          style="background-color: #f8f9fa; color: #212529; padding: 5px; padding-left: 24px;">
+                          {{ c.name|title }}
+                        </a>
+                        <div class="dropdown-menu" style="background-color: #f8f9fa;">
+                          {% for child in c.children.all %}
+                          <a class="dropdown-item" href="{{ child.get_absolute_url }}">{{ child.name }}</a>
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% else %}
+                      <a href="{{ c.get_absolute_url }}"
+                        style="color: #212529; padding: 5px; padding-left: 24px;">{{ c.name|title }}</a>
+                      {% endif %}
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+
+                <!-- Navbar dropdown -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-mdb-toggle="dropdown" aria-expanded="false">
+                    Marcas
+                  </a>
+
+                  <!-- Dropdown menu -->
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                      <a class="dropdown-item" href="{% url "core:store_home" %}">Todas as categorias</a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider" />
+                    </li>
+                    {% for c in brands %}
+                    <li {% if brand.slug == c.slug %}class="selected" {% endif %}>
+                      <a class="dropdown-item" href="{{ c.get_absolute_url }}">{{ c.title }}</a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+
+                <nav class="">
+                  <div class="container-fluid">
+                    <form class="d-flex input-group w-auto" action="/pesquisa">
+                      <input id="searchproducts" name="q" class="form-control rounded" placeholder="Search"
+                        aria-label="Search" aria-describedby="search-addon" />
+                      <button class="input-group-text border-0" id="searchb">
+                        <i class="fas fa-search" type="submit"></i>
+                      </button>
+                    </form>
+                  </div>
+                </nav>
+              </ul>
+              <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+          </div>
+          <!-- Container wrapper -->
+        </nav>
+
+      </ul>
+
+      <!-- Left links -->
     </div>
-    {% else %}
-  
-    <a class="nav-link waves-effect me-4" href="{% url 'account_login' %}">
-      <span class="clearfix d-none d-sm-inline-block"> Login </span>
-    </a>
-    <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
-      <span class="clearfix d-none d-sm-inline-block"> Cadastro </span>
-    </a>
+    <!-- Collapsible wrapper -->
 
+    <!-- Right elements -->
+    {% if request.user.is_authenticated %}
+    <div class="d-flex align-items-center">
+      <!-- Icon -->
+      <a class="nav-link me-4" href="{% url 'core:order-summary' %}">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="badge rounded-pill badge-notification bg-danger">{{ request.user|cart_item_count }}</span>
+      </a>
+      <!-- Icon dropdown -->
 
-    {% endif %}
+      <div class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Minha Conta
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'core:addresses' %}">Endereços</a>
+          <a class="dropdown-item" href="{% url 'core:edit_details' %}">Cadastro</a>
+          <a class="dropdown-item" href="{% url 'core:user_orders' %}">Meus Pedidos</a>
+          <a class="dropdown-item" href="{% url 'core:wishlist' %}">Lista de desejos</a>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
         </div>
-        <!-- Right elements -->
+      </div>
+      {% else %}
+
+      <a class="nav-link waves-effect me-4" href="{% url 'account_login' %}">
+        <span class="clearfix d-none d-sm-inline-block"> Login </span>
+      </a>
+      <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
+        <span class="clearfix d-none d-sm-inline-block"> Cadastro </span>
+      </a>
+
+
+      {% endif %}
     </div>
-    <!-- Container wrapper -->
+    <!-- Right elements -->
+  </div>
+  <!-- Container wrapper -->
 </nav>
 
 <script type="text/javascript">
   $(document).ready(function () {
-      $("#searchproducts").autocomplete({
-          source: "{% url 'core:product_search' %}"
-      });
+    $("#searchproducts").autocomplete({
+      source: "{% url 'core:product_search' %}",
+      select: function(event, ui) {
+        window.location.href = "{% url 'core:product_search' %}?q=" + ui.item.value;
+      }
+    });
+  });
+</script>
+
+
+<script>
+  var timeout;
+  $('.dropright .dropdown-toggle').mouseover(function () {
+    clearTimeout(timeout);
+    var activeDropdown = $('.dropright .dropdown-toggle.show');
+    if (activeDropdown.length) {
+      activeDropdown.dropdown('toggle');
+    }
+    $(this).dropdown('toggle');
+  }).mouseleave(function () {
+    var toggle = $(this);
+    var menu = toggle.next('.dropdown-menu');
+    timeout = setTimeout(function () {
+      if (!menu.is(':hover')) {
+        toggle.dropdown('toggle');
+      }
+    }, 1000); 
+  });
+
+  $('.dropright .dropdown-menu .dropdown-item').click(function () {
+    window.location.href = "{{ c.get_absolute_url }}";
+  });
+
+  $('.dropright .dropdown-menu').mouseleave(function () {
+    var toggle = $(this).prev('.dropdown-toggle');
+    timeout = setTimeout(function () {
+      toggle.dropdown('toggle');
+    }, 1000); 
   });
 </script>

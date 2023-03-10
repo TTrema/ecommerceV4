@@ -28,7 +28,7 @@
     </div>
     {% for address in addresses %}
     <div class="col">
-      <div class="card pb-3">
+      <div class="card pb-3" style="min-height: 200px; min-width: 300px; background-color: #e6f3ff;">
         <div class="card-header bg-white small text-muted">
           {% if address.default %}
             Endereço de entrega Atual
@@ -37,7 +37,7 @@
         </div>
         <div class="card-body small pb-1">
           <p class="card-text m-0 fw-bold">{{address.full_name}}</p>
-          <p class="card-text m-0">{{address.street}} n°{{address.number}}</p>
+          <p class="card-text m-0">{{address.street|truncatechars:37}} n°{{address.number}}</p>
           <p class="card-text m-0">{{address.bairro}}</p>
           <p class="card-text m-0">{{address.city}}</p>
           <p class="card-text m-0">{{address.zip_code}}</p>

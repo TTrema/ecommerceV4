@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Lista de desejos{% endblock %}
+
+{% block content %}
+<div class="col-12 mx-auto">
+  <h1 class="h3">Minha lista de desejos</h1>
+  <div>Aque está a sua list de desejos</div>
+  <hr />
+
+  {% if wishlist %}
+  {% for product in wishlist  %}
+
+  <div class="card mb-3 rounded-0">
+    <div class="row g-0">
+      <div class="col-md-2">
+        {% for image in product.product_image.all  %}
+          {% if image.is_feature %}
+          <img class="img-fluid d-block p-2" width="135px" src="{{ image.image.url }}"
+            alt="{{ image.image.alt_text }}" />
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">{{product.name}}</h5>
+          <p class="card-text">{{product.description}}</p>
+          <p class="card-text"><small class="text-muted">{{product.regular_price}}</small></p>
+          <a type="button" class="btn btn-primary fw500 btn-sm" href="{% url 'core:user_wishlist' product.id %}">Remover da lista de desejos</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+  {% else %}
+  <p class="card-text">Você ainda não tem nenhum produto na sua lista de desejos</p>
+  {% endif %}
+
+
+</div>
+{% endblock %}

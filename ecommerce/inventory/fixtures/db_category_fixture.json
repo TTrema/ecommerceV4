@@ -1,99 +1,146 @@
 [
-  {
+{
     "model": "inventory.category",
     "pk": 1,
     "fields": {
-      "name": "Electronics",
-      "slug": "electronics",
-      "parent": null,
-      "is_active": true,
-      "created_at": "2022-02-10T14:30:00Z",
-      "updated_at": "2022-02-10T14:30:00Z"
+        "name": "livro",
+        "slug": "livro",
+        "parent": null,
+        "is_active": true,
+        "created_at": "2023-03-10T21:06:23.054Z",
+        "updated_at": "2023-03-10T21:06:23.054Z"
     }
-  },
-  {
+},
+{
     "model": "inventory.category",
     "pk": 2,
     "fields": {
-      "name": "Mobiles",
-      "slug": "mobiles",
-      "parent": 1,
-      "is_active": true,
-      "created_at": "2022-02-11T10:15:00Z",
-      "updated_at": "2022-02-11T10:15:00Z"
+        "name": "poesia",
+        "slug": "poesia",
+        "parent": 1,
+        "is_active": true,
+        "created_at": "2023-03-10T21:09:40.916Z",
+        "updated_at": "2023-03-10T21:09:40.916Z"
     }
-  },
-  {
+},
+{
     "model": "inventory.category",
     "pk": 3,
     "fields": {
-      "name": "Laptops",
-      "slug": "laptops",
-      "parent": 1,
-      "is_active": true,
-      "created_at": "2022-02-12T11:45:00Z",
-      "updated_at": "2022-02-12T11:45:00Z"
+        "name": "Ficção Científica",
+        "slug": "ficcao-cientifica",
+        "parent": 1,
+        "is_active": true,
+        "created_at": "2023-03-10T21:14:12.789Z",
+        "updated_at": "2023-03-10T21:14:12.789Z"
     }
-  },
-  {
+},
+{
     "model": "inventory.category",
     "pk": 4,
     "fields": {
-      "name": "Clothing",
-      "slug": "clothing",
-      "parent": null,
-      "is_active": true,
-      "created_at": "2022-03-01T08:00:00Z",
-      "updated_at": "2022-03-01T08:00:00Z"
+        "name": "celulares",
+        "slug": "celulares",
+        "parent": null,
+        "is_active": true,
+        "created_at": "2023-03-10T21:25:27.296Z",
+        "updated_at": "2023-03-10T21:25:27.296Z"
     }
-  },
-  {
+},
+{
     "model": "inventory.category",
     "pk": 5,
     "fields": {
-      "name": "Men's Clothing",
-      "slug": "mens-clothing",
-      "parent": 4,
-      "is_active": true,
-      "created_at": "2022-03-02T14:30:00Z",
-      "updated_at": "2022-03-02T14:30:00Z"
+        "name": "Informática",
+        "slug": "Informatica",
+        "parent": null,
+        "is_active": true,
+        "created_at": "2023-03-10T21:32:43.959Z",
+        "updated_at": "2023-03-10T21:32:43.959Z"
     }
-  },
-  {
+},
+{
     "model": "inventory.category",
     "pk": 6,
     "fields": {
-      "name": "Women's Clothing",
-      "slug": "womens-clothing",
-      "parent": 4,
-      "is_active": true,
-      "created_at": "2022-03-03T11:00:00Z",
-      "updated_at": "2022-03-03T11:00:00Z"
+        "name": "notebook",
+        "slug": "notebook",
+        "parent": 5,
+        "is_active": true,
+        "created_at": "2023-03-10T21:32:52.301Z",
+        "updated_at": "2023-03-10T21:32:52.302Z"
     }
-  },
-  {
+},
+{
     "model": "inventory.category",
     "pk": 7,
     "fields": {
-      "name": "Books",
-      "slug": "books",
-      "parent": null,
-      "is_active": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "Jogos",
+        "slug": "jogos",
+        "parent": null,
+        "is_active": true,
+        "created_at": "2023-03-10T21:38:20.681Z",
+        "updated_at": "2023-03-10T21:38:20.681Z"
     }
-  },
-  {
+},
+{
     "model": "inventory.category",
     "pk": 8,
     "fields": {
-      "name": "Fiction",
-      "slug": "fiction",
-      "parent": 7,
-      "is_active": true,
-      "created_at": "2022-04-01T09:00:00Z",
-      "updated_at": "2022-04-01T09:00:00Z"
+        "name": "Luta",
+        "slug": "luta",
+        "parent": 7,
+        "is_active": true,
+        "created_at": "2023-03-10T21:38:21.881Z",
+        "updated_at": "2023-03-10T21:38:21.881Z"
     }
-  }
-
+},
+{
+    "model": "inventory.category",
+    "pk": 9,
+    "fields": {
+        "name": "Roupas",
+        "slug": "roupas",
+        "parent": null,
+        "is_active": true,
+        "created_at": "2023-03-10T21:41:57.192Z",
+        "updated_at": "2023-03-10T21:41:57.192Z"
+    }
+},
+{
+    "model": "inventory.category",
+    "pk": 10,
+    "fields": {
+        "name": "Masculino",
+        "slug": "masculino",
+        "parent": 9,
+        "is_active": true,
+        "created_at": "2023-03-10T21:42:09.729Z",
+        "updated_at": "2023-03-10T21:42:09.729Z"
+    }
+},
+{
+    "model": "inventory.category",
+    "pk": 11,
+    "fields": {
+        "name": "Bebidas",
+        "slug": "bebidas",
+        "parent": null,
+        "is_active": true,
+        "created_at": "2023-03-10T21:44:58.270Z",
+        "updated_at": "2023-03-10T21:44:58.270Z"
+    }
+},
+{
+    "model": "inventory.category",
+    "pk": 12,
+    "fields": {
+        "name": "alcoólicas",
+        "slug": "alcoolicas",
+        "parent": 11,
+        "is_active": true,
+        "created_at": "2023-03-10T21:45:18.385Z",
+        "updated_at": "2023-03-10T21:45:18.385Z"
+    }
+}
 ]

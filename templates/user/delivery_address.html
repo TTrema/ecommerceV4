@@ -12,7 +12,7 @@
   <hr />
 </div>
 <div class="container">
-  <a role="button" href="{% url 'core:add_address' %}" class="btn btn-primary btn-sm fw-bold w-1 my-4" type="button">Adicionar novo endereço</a>
+  <a role="button" href="{% url 'core:add_address' %}?checkout=checkout" class="btn btn-primary btn-sm fw-bold w-1 my-4" type="button">Adicionar novo endereço</a>
   <div class="row g-3">
     {% if addresses|length == 0 %}
     <body style="text-align: center; height: 100vh;">
@@ -21,8 +21,10 @@
     <div class="col-md-4 col-lg-6  p-0 order-3">
       {% include "user/order_snippet.html" %}   
 
-      <a role="button" href=" {% url 'core:payment' payment_option='stripe' %}" class="btn btn-primary fw-bold w-100" type="button">Continuar a Compra com o Stripe</a>
-      <a role="button" href=" {% url 'core:paypal' %}" class="btn btn-warning fw-bold w-100 my-4" type="button">Continuar a Compra com o Paypal</a>
+      <a role="button" href=" {% url 'core:payment' payment_option='stripe' %}?checkout=checkout" class="btn btn-primary fw-bold w-100" type="button">Continuar a Compra com o Stripe</a>
+      {% comment %}
+        <a role="button" href=" {% url 'core:paypal' %}" class="btn btn-warning fw-bold w-100 my-4" type="button">Continuar a Compra com o Paypal</a>
+      {% endcomment %}
 </div>
 
 
@@ -51,7 +53,7 @@
                 <p class="card-text m-0">{{address.city}}</p>
                 <p class="card-text m-0">{{address.zip_code}}</p>
                 <div class="pt-5">
-                  <a href="{% url 'core:edit_address' address.id %}" class="text-decoration-none">Editar</a>
+                  <a href="{% url 'core:edit_address' address.id %}?checkout=checkout" class="text-decoration-none">Editar</a>
                   {% if not address.default %}
                   | <a href="{% url 'core:set_default' address.id %}" class="text-decoration-none">Selecionar</a>
                   {% endif %}

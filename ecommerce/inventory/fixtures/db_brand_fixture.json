@@ -1,52 +1,82 @@
 [
-  {
-     "model":"inventory.brand",
-     "pk":1,
-     "fields":{
-        "title":"Nike",
-        "slug":"nike",
-        "created_at": "2022-04-01T09:00:00Z",
-        "updated_at": "2022-04-01T09:00:00Z"
-     }
-  },
-  {
-     "model":"inventory.brand",
-     "pk":2,
-     "fields":{
-        "title":"Adidas",
-        "slug":"adidas",
-        "created_at": "2022-04-01T09:00:00Z",
-        "updated_at": "2022-04-01T09:00:00Z"
-     }
-  },
-  {
-     "model":"inventory.brand",
-     "pk":3,
-     "fields":{
-        "title":"Puma",
-        "slug":"puma",
-        "created_at": "2022-04-01T09:00:00Z",
-        "updated_at": "2022-04-01T09:00:00Z"
-     }
-  },
-  {
-     "model":"inventory.brand",
-     "pk":4,
-     "fields":{
-        "title":"Reebok",
-        "slug":"reebok",
-        "created_at": "2022-04-01T09:00:00Z",
-        "updated_at": "2022-04-01T09:00:00Z"
-     }
-  },
-  {
-     "model":"inventory.brand",
-     "pk":5,
-     "fields":{
-        "title":"Under Armour",
-        "slug":"under-armour",
-        "created_at": "2022-04-01T09:00:00Z",
-        "updated_at": "2022-04-01T09:00:00Z"
-     }
-  }
+{
+    "model": "inventory.brand",
+    "pk": 1,
+    "fields": {
+        "title": "Johann Wolfgang",
+        "slug": "johann-wolfgang",
+        "created_at": "2023-03-10T21:11:25.626Z",
+        "updated_at": "2023-03-10T21:11:25.626Z"
+    }
+},
+{
+    "model": "inventory.brand",
+    "pk": 2,
+    "fields": {
+        "title": "Jeff Vandermeer",
+        "slug": "JeffVandermeer",
+        "created_at": "2023-03-10T21:14:41.824Z",
+        "updated_at": "2023-03-10T21:14:41.824Z"
+    }
+},
+{
+    "model": "inventory.brand",
+    "pk": 3,
+    "fields": {
+        "title": "Michel Faber",
+        "slug": "MichelFaber",
+        "created_at": "2023-03-10T21:19:11.586Z",
+        "updated_at": "2023-03-10T21:19:11.586Z"
+    }
+},
+{
+    "model": "inventory.brand",
+    "pk": 4,
+    "fields": {
+        "title": "Motorola",
+        "slug": "motorola",
+        "created_at": "2023-03-10T21:25:16.202Z",
+        "updated_at": "2023-03-10T21:25:16.202Z"
+    }
+},
+{
+    "model": "inventory.brand",
+    "pk": 5,
+    "fields": {
+        "title": "Lenovo",
+        "slug": "Lenovo",
+        "created_at": "2023-03-10T21:33:32.917Z",
+        "updated_at": "2023-03-10T21:33:32.917Z"
+    }
+},
+{
+    "model": "inventory.brand",
+    "pk": 6,
+    "fields": {
+        "title": "SNK",
+        "slug": "snk",
+        "created_at": "2023-03-10T21:37:22.956Z",
+        "updated_at": "2023-03-10T21:37:22.956Z"
+    }
+},
+{
+    "model": "inventory.brand",
+    "pk": 7,
+    "fields": {
+        "title": "Malwee",
+        "slug": "Malwee",
+        "created_at": "2023-03-10T21:41:38.761Z",
+        "updated_at": "2023-03-10T21:41:38.761Z"
+    }
+},
+{
+    "model": "inventory.brand",
+    "pk": 8,
+    "fields": {
+        "title": "The Grill Master",
+        "slug": "TheGrillMaster",
+        "created_at": "2023-03-10T21:44:17.787Z",
+        "updated_at": "2023-03-10T21:44:17.787Z"
+    }
+}
 ]
