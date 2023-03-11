@@ -167,24 +167,19 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 
 # Pagserguro
 
-PAGSEGURO_EMAIL = PAGEMAIL
-PAGSEGURO_TOKEN = PAGTOKEN
-PAGSEGURO_SANDBOX = PAGSAND
-PAGSEGURO_SANDBOX = True  # usar ambiente de testes
+# PAGSEGURO_EMAIL = PAGEMAIL
+# PAGSEGURO_TOKEN = PAGTOKEN
+# PAGSEGURO_SANDBOX = PAGSAND
+# PAGSEGURO_SANDBOX = True  # usar ambiente de testes
 
 # MercadoPago
 
-MP_ACCESS_TOKEN = MPAT
+# MP_ACCESS_TOKEN = MPAT
 
-# PAYPAL
+# Paypal
 
 PAYPAL_ID = PAYID
 PAYPAL_SK = PAYSK
-
-# DJANGO PAYPAL
-
-PAYPAL_RECEIVER_EMAIL = "jessewillian@live.com"
-PAYPAL_TEST = True  # or False if you're in production
 
 
 # STRIPE

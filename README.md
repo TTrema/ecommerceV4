@@ -1,30 +1,70 @@
-﻿Um site de ecommerce feito em django usando template MDB5: https://mdbootstrap.com/freebies/e-commerce/
+﻿# Site de ecommerce feito em Django
 
-usando Postgres como banco de dados através do docker
-
-Feito até agora:
-
-- Modelo do Banco de Dados do Produtos, Categorias e Marcas com suas respectivas páginas
+O front foi feito usando o template MDB5, disponível em https://mdbootstrap.com/freebies/e-commerce/.
 
 
-- Carrinho de compras
+## Demonstração:
+
+Uma demonstração do site está disponivel em:
+
+https://jwill.pythonanywhere.com/
 
 
-- Sistema e página de endereço de entrega
+## Características:
 
+   <ul>
+  <li>Carrinho de compras</li>
+  <li>Vários endereços</li>
+  <li>Sistema de cupom</li> 
+  <li>Cálculo de frete usando a API dos Correios</li>
+  <li>Busca de produtos com completamento automático</li>
+  <li>Pagamento com Stripe e Paypal</li>
+  <li>Sistema para pedido de reembolso</li>
+  <li>Lista de desejos</li>
+  </ul>
+  
+## Pré-requisitos:
+   <ul>
+   <li>Docker</li> 
+   </ul>
 
-- Sistema de cupom
+Em caso de erro "connection to server at "127.0.0.1", port 5432 failed: FATAL: password authentication failed for user "postgres", será preciso primeiro desativar o serviço local do postgres.
 
+## Instruções de uso:
 
-- Sistema de cálculo de frete usando a API dos Correios
+## Crie e ative um virtual environment:
 
+        Windows:
+            Crie a venv usando o comando python -m venv nome_da_venv (exemplo: python -m venv venv).
+            Ative a venv usando o comando .\nome_da_venv\Scripts\activate (exemplo: .\venv\Scripts\activate).
 
-- Sistema de busca de produtos com completamento automático 
+        Linux e macOS:
+            Crie a venv usando o comando python3 -m venv nome_da_venv (exemplo: python3 -m venv venv).
+            Ative a venv usando o comando source nome_da_venv/bin/activate (exemplo: source venv/bin/activate).
 
+### Use o comando:
 
-- Sistema de pagamento com Stripe e Paypal
+    pip install -r requirements.txt
 
+### Use o comando para iniciar o banco de dados em Postgres (precisa estar com o Docker ativo e funcionando):
 
-- Sistema para pedido de reembolso
+    docker-compose up
+
+### Coloque suas credenciais
+
+    Preencha as KEYS do Django, Paypal e Stripe com suas credenciais no arquivo keys.py.
+
+### Use os comandos:
+
+    python manage.py makemigrations
+    python manage.py migrate
+
+### Ou use apenas o comando que faz as migrações e preenche o banco de dados com categorias e produtos:
+
+    python manage.py load-mixtures
+
+### Use o comando:
+
+    python manage.py runserver
 
 

@@ -3,7 +3,7 @@
     "model": "inventory.category",
     "pk": 1,
     "fields": {
-        "name": "livro",
+        "name": "Livro",
         "slug": "livro",
         "parent": null,
         "is_active": true,
@@ -15,7 +15,7 @@
     "model": "inventory.category",
     "pk": 2,
     "fields": {
-        "name": "poesia",
+        "name": "Poesia",
         "slug": "poesia",
         "parent": 1,
         "is_active": true,
@@ -27,7 +27,7 @@
     "model": "inventory.category",
     "pk": 3,
     "fields": {
-        "name": "Ficcaoo Cientifica",
+        "name": "Ficção Científica",
         "slug": "ficcao-cientifica",
         "parent": 1,
         "is_active": true,
@@ -39,7 +39,7 @@
     "model": "inventory.category",
     "pk": 4,
     "fields": {
-        "name": "celulares",
+        "name": "Celulares",
         "slug": "celulares",
         "parent": null,
         "is_active": true,
@@ -51,7 +51,7 @@
     "model": "inventory.category",
     "pk": 5,
     "fields": {
-        "name": "Informatica",
+        "name": "Informática",
         "slug": "Informatica",
         "parent": null,
         "is_active": true,
@@ -63,7 +63,7 @@
     "model": "inventory.category",
     "pk": 6,
     "fields": {
-        "name": "notebook",
+        "name": "Notebook",
         "slug": "notebook",
         "parent": 5,
         "is_active": true,
@@ -135,7 +135,7 @@
     "model": "inventory.category",
     "pk": 12,
     "fields": {
-        "name": "alcoolicas",
+        "name": "Alcoólicas",
         "slug": "alcoolicas",
         "parent": 11,
         "is_active": true,
