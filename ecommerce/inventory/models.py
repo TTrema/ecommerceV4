@@ -59,7 +59,7 @@ class Product(models.Model):
         return reverse("core:product_detail", args=[self.slug])
 
     def offprice(self):
-        return str(int((1 - self.discount_price / self.price) * 100))
+        return str(round((1 - self.discount_price / self.price) * 100))
 
     def get_add_to_cart_url(self):
         return reverse("core:add-to-cart", kwargs={"slug": self.slug})
@@ -78,6 +78,9 @@ class ProductImage(models.Model):
     class Meta:
         verbose_name = "Product Image"
         verbose_name_plural = "Product Images"
+
+
+
 
 
 # class Review(models.Model):

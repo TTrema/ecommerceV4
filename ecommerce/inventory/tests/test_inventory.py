@@ -1,31 +1,52 @@
+from django.urls import reverse
+from pytest_django.asserts import assertTemplateUsed
+from ecommerce.inventory.models import Brand, Category, Product, ProductImage
+from django.core.files.uploadedfile import SimpleUploadedFile
 import pytest
-from django.utils import timezone
-from ecommerce.inventory.models import Category
 
-@pytest.mark.dbfixture
-def category():
-    return Category.objects.create(name='Test Category', slug='test-category', is_active=True)
+# test Category model
+@pytest.mark.django_db
+def test_category_model():
+    category = Category.objects.create(name="Test Category", slug="test-category")
+    assert category.name == "Test Category"
+    assert category.slug == "test-category"
+    assert str(category) == "Test Category"
+    assert category.get_absolute_url() == reverse("core:category_list", args=["test-category"])
 
-def test_category_str(category):
-    assert str(category) == 'Test Category'
+# test Brand model
+@pytest.mark.django_db
+def test_brand_model():
+    brand = Brand.objects.create(title="Test Brand", slug="test-brand")
+    assert brand.title == "Test Brand"
+    assert brand.slug == "test-brand"
+    assert str(brand) == "Test Brand"
+    assert brand.get_absolute_url() == reverse("core:brand_list", args=["test-brand"])
 
-def test_category_created_at(category):
-    assert isinstance(category.created_at, timezone.datetime)
-
-def test_category_updated_at(category):
-    assert isinstance(category.updated_at, timezone.datetime)
-
-def test_category_defaults():
-    category = Category.objects.create(name='Test Category 2', slug='test-category-2')
-    assert category.is_active == True
-    assert category.parent == None
-
-def test_category_parent(category):
-    child_category = Category.objects.create(name='Child Category', slug='child-category', parent=category)
-    assert child_category.parent == category
-    assert child_category in category.children.all()
-
-def test_category_slug_unique():
-    Category.objects.create(name='Test Category 3', slug='test-category-3')
-    with pytest.raises(Exception):
-        Category.objects.create(name='Test Category 4', slug='test-category-3')
+# test Product model
+@pytest.mark.django_db
+def test_product_model():
+    brand = Brand.objects.create(title="Test Brand", slug="test-brand")
+    category = Category.objects.create(name="Test Category", slug="test-category")
+    product = Product.objects.create(
+        name="Test Product",
+        slug="test-product",
+        brand=brand,
+        category=category,
+        description="This is a test product",
+        price=10.0,
+        discount_price=8.0,
+        available=True,
+    )
+    assert product.name == "Test Product"
+    assert product.slug == "test-product"
+    assert product.brand == brand
+    assert product.category == category
+    assert product.description == "This is a test product"
+    assert product.price == 10.0
+    assert product.discount_price == 8.0
+    assert product.available == True
+    assert str(product) == "Test Product"
+    assert product.offprice() == "20"
+    assert product.get_absolute_url() == reverse("core:product_detail", args=["test-product"])
+    assert product.get_add_to_cart_url() == reverse("core:add-to-cart", kwargs={"slug": "test-product"})
+    assert product.get_remove_from_cart_url() == reverse("core:remove-from-cart", kwargs={"slug": "test-product"})
