@@ -8,7 +8,7 @@
     {% for order_item in order.items.all %}   
     <li class="list-group-item d-flex justify-content-between lh-condensed">
         <div>
-        <h5 class="my-0">{{ order_item.quantity }} x {{ order_item.product.name|truncatechars:42 }}</h5>
+        <h5 class="my-0">{{ order_item.quantity }} x {{ order_item.product.name|truncatechars:37 }}</h5>
     
         </div>
         <span class="text-muted">R$ {{ order_item.get_final_price }}</span>

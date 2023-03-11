@@ -22,9 +22,9 @@
       {% include "user/order_snippet.html" %}   
 
       <a role="button" href=" {% url 'core:payment' payment_option='stripe' %}?checkout=checkout" class="btn btn-primary fw-bold w-100" type="button">Continuar a Compra com o Stripe</a>
-      {% comment %}
+     
         <a role="button" href=" {% url 'core:paypal' %}" class="btn btn-warning fw-bold w-100 my-4" type="button">Continuar a Compra com o Paypal</a>
-      {% endcomment %}
+    
 </div>
 
 

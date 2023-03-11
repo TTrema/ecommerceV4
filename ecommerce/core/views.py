@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -22,6 +22,7 @@ from django.views.generic import View
 from ecommerce.core.forms import CouponForm, PaymentForm, RefundForm, UserAddressForm, UserEditForm
 from ecommerce.core.models import Address, Coupon, Order, OrderItem, Payment, Refund, UserProfile
 from ecommerce.inventory.models import Brand, Category, Product
+from decimal import Decimal
 
 stripe.api_key = settings.STRIPESK
 
@@ -42,15 +43,31 @@ def payment_success(request):
     return render(request, "user/payment_successful.html")
 
 
+def paypaltoken(request):
+    client_id = settings.PAYID
+    client_secret = settings.PAYSK
+
+    # Faça uma chamada à API de autenticação do PayPal para obter um token de acesso
+    auth_url = "https://api.sandbox.paypal.com/v1/oauth2/token"
+    auth_data = {"grant_type": "client_credentials"}
+    auth_headers = {"Accept": "application/json", "Accept-Language": "en_US"}
+    auth = requests.post(auth_url, data=auth_data, headers=auth_headers, auth=(client_id, client_secret))
+
+    # Analise a resposta JSON e obtenha o token de acesso
+    auth_json = auth.json()
+    access_token = auth_json["access_token"]
+    return access_token
+
+
 def paypal(request):
     paypalid = settings.PAYPAL_ID
-    print(id)
     order = Order.objects.get(user=request.user, ordered=False)
     if order.billing_address:
 
         session = request.session
         addresses = Address.objects.filter(user=request.user).order_by("-default")
         paypaltotal = str(order.get_total_frete()).replace(",", ".")
+        accesse_token = paypaltoken(request)
 
         if "address" not in request.session:
             session["address"] = {"address_id": str(addresses[0].id)}
@@ -59,6 +76,7 @@ def paypal(request):
             session.modified = True
 
         context = {
+            "accesse_token": accesse_token,
             "paypalid": paypalid,
             "addresses": addresses,
             "order": order,
@@ -86,12 +104,12 @@ def edit_details(request):
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, available=True)
     product2 = Product.objects.filter(~Q(slug=slug) & Q(available=True))[:4]
-    brand = product.brand  
+    brand = product.brand
     if product.users_wishlist.filter(id=request.user.id).exists():
-        wishlist = 'Remover da lista de desejos'
+        wishlist = "Remover da lista de desejos"
 
     else:
-        wishlist = 'Adicionar a sua lista de desejos'
+        wishlist = "Adicionar a sua lista de desejos"
     return render(request, "product.html", {"product": product, "product2": product2, "brand": brand, "wishlist": wishlist})
 
 
@@ -115,11 +133,10 @@ def brand_list(request, brand_slug=None):
     return render(request, "brand.html", {"brand": brand, "products": products})
 
 
-
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         try:
-            order = Order.objects.filter(user=request.user, ordered=False).order_by('-start_date').first()
+            order = Order.objects.filter(user=request.user, ordered=False).order_by("-start_date").first()
             context = {"object": order}
             return render(request, "user/order_summary.html", context)
         except Order.DoesNotExist:
@@ -205,18 +222,18 @@ def view_address(request):
 @login_required
 def add_address(request):
     if request.method == "POST":
-        checkout = request.GET.get('checkout')
+        checkout = request.GET.get("checkout")
         address_form = UserAddressForm(data=request.POST)
         if address_form.is_valid():
             address_form = address_form.save(commit=False)
             address_form.user = request.user
             address_form.save()
-            if checkout == 'checkout':
+            if checkout == "checkout":
                 next = "core:delivery_address"
 
             else:
                 next = "core:addresses"
-            
+
             if Address.objects.filter(user=request.user, default=True).exists():
                 return HttpResponseRedirect(reverse(next))
 
@@ -231,16 +248,16 @@ def add_address(request):
 
 @login_required
 def edit_address(request, id):
-    
+
     if request.method == "POST":
-        checkout = request.GET.get('checkout')
+        checkout = request.GET.get("checkout")
         address = Address.objects.get(pk=id, user=request.user)
         address_form = UserAddressForm(instance=address, data=request.POST)
         if address_form.is_valid():
             address_form.save()
-            if checkout == 'checkout':
+            if checkout == "checkout":
                 return HttpResponseRedirect(reverse("core:delivery_address"))
-            else:              
+            else:
                 return HttpResponseRedirect(reverse("core:addresses"))
     else:
         address = Address.objects.get(pk=id, user=request.user)
@@ -286,7 +303,6 @@ def add_to_wishlist(request, id):
         messages.success(request, "O produto " + product.name + " foi adicionado a sua lista de desejos")
 
     return HttpResponseRedirect(request.META["HTTP_REFERER"])
-
 
 
 def calculate_shipping(zip_code, shipping_method):
@@ -342,20 +358,18 @@ def delivery_address(request):
     #     messages.success(request, "Please select delivery option")
     #     return HttpResponseRedirect(request.META["HTTP_REFERER"])
     order = Order.objects.get(user=request.user, ordered=False)
-    print(order.ordered)
     addresses = Address.objects.filter(user=request.user).order_by("-default")
     shipping_type = get_object_or_404(Order, user=request.user, ordered=False)
-    
+
     try:
         default_address = Address.objects.get(user=request.user, default=True)
         shipping_cost = calculate_shipping(default_address.zip_code, shipping_type.delivery_type)
-        print(order.get_total_frete())
 
         order.delivery_price = shipping_cost[0]
         order.shipping_address = default_address
         order.save()
     except Address.DoesNotExist:
-        shipping_cost = None # ou fazer qualquer outra ação caso o objeto não exista
+        shipping_cost = None  # ou fazer qualquer outra ação caso o objeto não exista
 
     # if "address" not in request.session:
     #     session["address"] = {"address_id": str(addresses[0].id)}
@@ -418,11 +432,10 @@ class AddCouponView(View):
 
 
 class RequestRefundView(View):
-    
     def get(self, *args, **kwargs):
-        ref_code_item = self.request.GET.get('ref_code')
-        form = RefundForm(initial={'ref_code': ref_code_item} if ref_code_item else None)
-        context = {"form": form, 'ref_code_item':ref_code_item}
+        ref_code_item = self.request.GET.get("ref_code")
+        form = RefundForm(initial={"ref_code": ref_code_item} if ref_code_item else None)
+        context = {"form": form, "ref_code_item": ref_code_item}
         return render(self.request, "user/request_refund.html", context)
 
     def post(self, *args, **kwargs):
@@ -471,74 +484,52 @@ def search(request):
 def user_orders(request):
     user_id = request.user.id
     orders = Order.objects.filter(user_id=user_id).filter(ordered=True)
-    print(orders)
     return render(request, "user/user_orders.html", {"orders": orders})
 
 
-from paypalcheckoutsdk.orders import OrdersGetRequest
-
-from .paypal import PayPalClient
-
-
-@login_required
+@csrf_exempt
 def payment_complete(request):
 
-    print("ok1111")
-    try:
+    if request.method == "POST":
         order = Order.objects.get(user=request.user, ordered=False)
-        print(order)
+        orderID = request.POST.get("orderID")
+        payerID = request.POST.get("payerID")
+        amount = request.POST.get("amount")
 
-        print("ok22222")
+        decimal_amount = Decimal(amount)
 
-        PPClient = PayPalClient()
-        print(PPClient)
+        if decimal_amount == order.get_total_frete():
 
-        print("okAAAAA")
-
-        body = json.loads(request.body)
-
-        print("okBBBB")
-        data = body["orderID"]
-
-        print("okCCCCCCCC")
-
-        requestorder = OrdersGetRequest(data)
-        response = PPClient.client.execute(requestorder)
-        print("ok3333333")
-        print(response.result.id)
-
-        try:
-            print("ok444444")
-
+            # Processar o pagamento
             payment = Payment()
-            print("ok555555")
-            payment.charge_id = response.result.id
-            print("ok66666666")
+            payment.charge_id = orderID
             payment.user = request.user
             payment.amount = order.get_total_frete()
             payment.save()
-            print("77777777")
 
+            # Atualizar o pedido
             order.ordered = True
             order.payment_option = "P"
             order.payment = payment
             order.ref_code = create_ref_code()
             order.save()
 
+            # Atualizar os itens do pedido
             order_items = order.items.all()
             order_items.update(ordered=True)
             for item in order_items:
                 item.save()
 
-            return redirect("core:payment_success")
-        except Exception as e:
-            # send an email to ourselves
-            messages.warning(request, "A serious error occurred. We have been notifed.")
-            return redirect("/")
+            # Redirecionar para a página de sucesso de pagamento
+            return redirect(reverse("core:payment_success"))
 
-    except Exception as e:
-        messages.warning(request, "A serious error occurred. We have been notifed.")
-        return redirect("/")
+        else:
+            # O valor do pagamento não corresponde ao total da compra
+            return render(request, "payment_error.html", {"error_message": "O valor do pagamento não corresponde ao total da compra."})
+
+    else:
+        # A solicitação não é do tipo POST
+        return render(request, "payment_error.html", {"error_message": "A solicitação não é do tipo POST."})
 
 
 class PaymentView(View):
