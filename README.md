@@ -25,7 +25,8 @@ https://jwill.pythonanywhere.com/
   
 ## Pré-requisitos:
    <ul>
-   <li>Docker</li> 
+   <li>Docker</li>
+   <li>Python</li>
    </ul>
 
 Em caso de erro "connection to server at "127.0.0.1", port 5432 failed: FATAL: password authentication failed for user "postgres", será preciso primeiro desativar o serviço local do postgres.
