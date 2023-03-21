@@ -26,6 +26,7 @@ https://jwill.pythonanywhere.com/
 ## Pré-requisitos:
    <ul>
    <li>Docker</li> 
+   <li>Python</li>
    </ul>
 
 Em caso de erro "connection to server at "127.0.0.1", port 5432 failed: FATAL: password authentication failed for user "postgres", será preciso primeiro desativar o serviço local do postgres.
@@ -34,13 +35,13 @@ Em caso de erro "connection to server at "127.0.0.1", port 5432 failed: FATAL: p
 
 ## Crie e ative um virtual environment:
 
-        Windows:
-            Crie a venv usando o comando python -m venv nome_da_venv (exemplo: python -m venv venv).
-            Ative a venv usando o comando .\nome_da_venv\Scripts\activate (exemplo: .\venv\Scripts\activate).
+    Windows:
+        Crie a venv usando o comando python -m venv nome_da_venv (exemplo: python -m venv venv).
+        Ative a venv usando o comando .\nome_da_venv\Scripts\activate (exemplo: .\venv\Scripts\activate).
 
-        Linux e macOS:
-            Crie a venv usando o comando python3 -m venv nome_da_venv (exemplo: python3 -m venv venv).
-            Ative a venv usando o comando source nome_da_venv/bin/activate (exemplo: source venv/bin/activate).
+    Linux e macOS:
+        Crie a venv usando o comando python3 -m venv nome_da_venv (exemplo: python3 -m venv venv).
+        Ative a venv usando o comando source nome_da_venv/bin/activate (exemplo: source venv/bin/activate).
 
 ### Use o comando:
 

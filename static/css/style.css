@@ -4,9 +4,9 @@
 }
 
 #my-custom-class {
-  width: 10%; /* ou qualquer outra largura desejada */
-  max-width: 10px; /* ou qualquer outra largura máxima desejada */
-  margin: 0 auto; /* centralizar a lista horizontalmente */
+  width: 10%; 
+  max-width: 10px; 
+  margin: 0 auto; 
 }
 
 .form-control.mb-4 {
@@ -18,11 +18,14 @@
 }
 
 .dropdown-item:hover {
-  background-color: blue;
-  color: white;
+  background-color: rgba(131, 91, 91, 0.404);
+  color: rgb(0, 0, 0);
 }
 
-#dropdown-item:hover {
-  background-color: blue;
-  color: white;
+
+.dropdown-toggle:hover {
+  background-color: rgba(131, 91, 91, 0.404);
+  color: rgb(0, 0, 0);
 }
+
+

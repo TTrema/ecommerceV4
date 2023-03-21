@@ -52,7 +52,7 @@
                   <!-- Dropdown menu -->
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #f8f9fa;">
                     <li>
-                      <a class="dropdown-item" href="{% url "core:store_home" %}">Todas as categorias</a>
+                      <a class="dropdown-item" href="{% url "core:store_home" %}">Todas</a>
                     </li>
                     <li>
                       <hr class="dropdown-divider" />
@@ -63,7 +63,7 @@
                       <div class="btn-group shadow-none dropright">
                         <a class="dropdown-toggle" href="{{ c.get_absolute_url }}" role="button" aria-haspopup="true"
                           aria-expanded="false"
-                          style="background-color: #f8f9fa; color: #212529; padding: 5px; padding-left: 24px;">
+                          style="color: #212529; padding: 5px; padding-left: 24px;">
                           {{ c.name|title }}
                         </a>
                         <div class="dropdown-menu" style="background-color: #f8f9fa;">
@@ -73,7 +73,7 @@
                         </div>
                       </div>
                       {% else %}
-                      <a href="{{ c.get_absolute_url }}"
+                      <a class="dropdown-item" href="{{ c.get_absolute_url }}"
                         style="color: #212529; padding: 5px; padding-left: 24px;">{{ c.name|title }}</a>
                       {% endif %}
                     </li>
@@ -91,7 +91,7 @@
                   <!-- Dropdown menu -->
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li>
-                      <a class="dropdown-item" href="{% url "core:store_home" %}">Todas as categorias</a>
+                      <a class="dropdown-item" href="{% url "core:store_home" %}">Todas</a>
                     </li>
                     <li>
                       <hr class="dropdown-divider" />
